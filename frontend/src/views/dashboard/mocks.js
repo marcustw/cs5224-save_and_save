@@ -34,3 +34,78 @@ for (let i = 0; i < 200; i += 1) {
   const randomSelection = forSample[Math.floor(Math.random() * sample.length)];
   forCollectRows.push(createForCollectData(i, ...randomSelection));
 }
+
+export const mockReceipt = [
+  {
+    itemName: 'Milk',
+    purchase: 2
+  },
+  {
+    itemName: 'bread',
+    purchase: 2
+  },
+  {
+    itemName: 'canned drink',
+    purchase: 3
+  },
+  {
+    itemName: 'canned drink',
+    purchase: 3
+  },
+  {
+    itemName: 'canned drink',
+    purchase: 3
+  },
+  {
+    itemName: 'canned drink',
+    purchase: 3
+  },
+  {
+    itemName: 'bread',
+    purchase: 2
+  },
+  {
+    itemName: 'canned drink',
+    purchase: 3
+  },
+  {
+    itemName: 'canned drink',
+    purchase: 3
+  },
+  {
+    itemName: 'canned drink',
+    purchase: 3
+  },
+  {
+    itemName: 'canned drink',
+    purchase: 3
+  },
+  {
+    itemName: 'canned drink',
+    purchase: 3
+  },
+  {
+    itemName: 'canned drink',
+    purchase: 3
+  },
+  {
+    itemName: 'canned drink',
+    purchase: 3
+  },
+  {
+    itemName: 'bread',
+    purchase: 2
+  },
+  {
+    itemName: 'canned drink',
+    purchase: 3
+  },
+  {
+    itemName: 'canned drink',
+    purchase: 3
+  },
+  {
+    itemName: 'canned drink',
+    purchase: 3
+  }
+];
