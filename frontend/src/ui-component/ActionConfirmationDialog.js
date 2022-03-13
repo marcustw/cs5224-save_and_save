@@ -20,9 +20,11 @@ export const ActionConfirmationDialog = ({ data, handleClose, open, title, descr
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => handleClose('cancel')} color="inherit" value="cancel">
-          {cancelText}
-        </Button>
+        {cancelText && (
+          <Button onClick={() => handleClose('cancel')} color="inherit" value="cancel">
+            {cancelText}
+          </Button>
+        )}
         <Button onClick={() => handleClose('confirm', data)} value="confirm">
           {confirmText}
         </Button>

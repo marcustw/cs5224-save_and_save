@@ -5,5 +5,6 @@ export default {
   search: { id: 'search', url: '/search/items' },
   login: { id: 'login', url: '/user/login' },
   register: { id: 'register', url: '/user/register' },
-  account: { id: 'account', url: '/user/account' }
+  account: { id: 'account', url: '/user/account' },
+  cart: { id: 'account', url: '/cart' }
 };

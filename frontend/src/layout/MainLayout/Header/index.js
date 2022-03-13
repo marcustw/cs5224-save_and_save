@@ -12,6 +12,7 @@ import NotificationSection from './NotificationSection';
 
 // assets
 import { IconMenu2 } from '@tabler/icons';
+import CartSection from './CartSection';
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
@@ -20,7 +21,6 @@ const Header = ({ handleLeftDrawerToggle }) => {
 
   return (
     <>
-      {/* logo & toggler button */}
       <Box
         sx={{
           width: 228,
@@ -54,14 +54,10 @@ const Header = ({ handleLeftDrawerToggle }) => {
           </Avatar>
         </ButtonBase>
       </Box>
-
-      {/* header search */}
-      {/* <SearchSection /> */}
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ flexGrow: 1 }} />
-
-      {/* notification & profile */}
       <NotificationSection />
+      <CartSection />
       <ProfileSection />
     </>
   );

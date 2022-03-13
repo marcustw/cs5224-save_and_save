@@ -12,6 +12,7 @@ const Analyticpage = Loadable(lazy(() => import('views/analytic')));
 const InventoryManagementPage = Loadable(lazy(() => import('views/store/inventoryManagement')));
 const SearchPage = Loadable(lazy(() => import('views/user/search')));
 const AccountPage = Loadable(lazy(() => import('views/user/account')));
+const CartPage = Loadable(lazy(() => import('views/user/cart')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -38,6 +39,10 @@ const MainRoutes = {
     {
       path: routes.analytic.url,
       element: <Analyticpage />
+    },
+    {
+      path: routes.cart.url,
+      element: <CartPage />
     }
     // {
     //     path: '/utils/util-typography',
