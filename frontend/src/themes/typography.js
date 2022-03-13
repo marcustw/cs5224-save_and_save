@@ -68,7 +68,7 @@ export default function themeTypography(theme) {
     customInput: {
       marginTop: 1,
       marginBottom: 1,
-      '& > label': {
+      '& > label, & .MuiInputLabel-formControl': {
         top: 23,
         left: 0,
         color: theme.grey500,
@@ -76,7 +76,7 @@ export default function themeTypography(theme) {
           top: 5
         }
       },
-      '& > div > input': {
+      '& > div > input, & .MuiInputBase-input, & .MuiSelect-select, & > div > textarea': {
         padding: '30.5px 14px 11.5px !important'
       },
       '& legend': {

@@ -1,5 +1,6 @@
 // material-ui
 import { useTheme } from '@mui/material/styles';
+import logo from 'assets/images/logo.svg';
 
 /**
  * if you want to use image instead of <svg> uncomment following.
@@ -12,17 +13,7 @@ import { useTheme } from '@mui/material/styles';
 // ==============================|| LOGO SVG ||============================== //
 
 const Logo = () => {
-  const theme = useTheme();
-
-  return (
-    /**
-     * if you want to use image instead of svg uncomment following, and comment out <svg> element.
-     *
-     * <img src={logo} alt="Berry" width="100" />
-     *
-     */
-    <div style={{ fontSize: 24 }}>Save & Save</div>
-  );
+  return <img src={logo} alt="SaveAndSave" width="50" height="50" />;
 };
 
 export default Logo;

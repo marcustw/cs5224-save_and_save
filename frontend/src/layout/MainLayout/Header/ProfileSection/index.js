@@ -8,22 +8,15 @@ import { useTheme } from '@mui/material/styles';
 import {
   Avatar,
   Box,
-  Card,
-  CardContent,
   Chip,
   ClickAwayListener,
-  Divider,
-  Grid,
-  InputAdornment,
   List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  OutlinedInput,
   Paper,
   Popper,
   Stack,
-  Switch,
   Typography
 } from '@mui/material';
 
@@ -36,7 +29,7 @@ import Transitions from 'ui-component/extended/Transitions';
 import User1 from 'assets/images/users/user-round.svg';
 
 // assets
-import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons';
+import { IconLogout, IconSettings } from '@tabler/icons';
 
 import routes from 'routes/routeObject';
 import config from 'config';
@@ -157,7 +150,7 @@ const ProfileSection = () => {
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
                 <MainCard border={false} elevation={16} content={false} boxShadow shadow={theme.shadows[16]}>
-                  <Box sx={{ p: 2 }}>
+                  <Box sx={{ p: 2, pb: 0 }}>
                     <Stack>
                       <Stack direction="row" spacing={0.5} alignItems="center">
                         <Typography variant="h4">Good Morning,</Typography>
@@ -166,37 +159,10 @@ const ProfileSection = () => {
                         </Typography>
                       </Stack>
                       <Typography variant="subtitle2">Project Admin</Typography>
-                      <Card
-                        sx={{
-                          bgcolor: theme.palette.primary.light,
-                          my: 2
-                        }}
-                      >
-                        <CardContent>
-                          <Grid container spacing={3} direction="column">
-                            <Grid item>
-                              <Grid item container alignItems="center" justifyContent="space-between">
-                                <Grid item>
-                                  <Typography variant="subtitle1">Allow Notifications</Typography>
-                                </Grid>
-                                <Grid item>
-                                  <Switch
-                                    checked={notification}
-                                    onChange={(e) => setNotification(e.target.checked)}
-                                    name="sdm"
-                                    size="small"
-                                  />
-                                </Grid>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                        </CardContent>
-                      </Card>
                     </Stack>
                   </Box>
-                  <Divider />
                   <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 250px)', overflowX: 'hidden' }}>
-                    <Box sx={{ p: 2 }}>
+                    <Box sx={{ pl: 2, pr: 2 }}>
                       <List
                         component="nav"
                         sx={{

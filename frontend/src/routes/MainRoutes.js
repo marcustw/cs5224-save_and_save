@@ -7,20 +7,11 @@ import Loadable from 'ui-component/Loadable';
 import routes from 'routes/routeObject';
 
 // dashboard routing
-const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
+const DashboardDefault = Loadable(lazy(() => import('views/dashboard')));
+const Analyticpage = Loadable(lazy(() => import('views/analytic')));
 const InventoryManagementPage = Loadable(lazy(() => import('views/store/inventoryManagement')));
 const SearchPage = Loadable(lazy(() => import('views/user/search')));
 const AccountPage = Loadable(lazy(() => import('views/user/account')));
-
-// utilities routing
-const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
-const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
-const UtilsShadow = Loadable(lazy(() => import('views/utilities/Shadow')));
-const UtilsMaterialIcons = Loadable(lazy(() => import('views/utilities/MaterialIcons')));
-const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons')));
-
-// sample page routing
-const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -43,6 +34,10 @@ const MainRoutes = {
     {
       path: routes.account.url,
       element: <AccountPage />
+    },
+    {
+      path: routes.analytic.url,
+      element: <Analyticpage />
     }
     // {
     //     path: '/utils/util-typography',

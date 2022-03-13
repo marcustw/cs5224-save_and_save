@@ -138,7 +138,6 @@ const SearchSection = () => {
                     <Transitions type="zoom" {...TransitionProps} sx={{ transformOrigin: 'center left' }}>
                       <Card
                         sx={{
-                          background: '#fff',
                           [theme.breakpoints.down('sm')]: {
                             border: 0,
                             boxShadow: 'none'
