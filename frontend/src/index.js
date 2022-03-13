@@ -12,6 +12,12 @@ import { store } from 'store';
 // style + assets
 import 'assets/scss/style.scss';
 
+// AWS configuration
+import { Amplify } from 'aws-amplify';
+import awsExports from './aws-exports';
+import '@aws-amplify/ui-react/styles.css';
+Amplify.configure(awsExports);
+
 // ==============================|| REACT DOM RENDER  ||============================== //
 
 ReactDOM.render(

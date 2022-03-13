@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useContext } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -34,6 +34,7 @@ import { IconLogout, IconSettings } from '@tabler/icons';
 import routes from 'routes/routeObject';
 import config from 'config';
 import { MENU_OPEN } from 'store/actions';
+import { UserContext } from 'Contexts/UserContext';
 
 // ==============================|| PROFILE MENU ||============================== //
 
@@ -44,14 +45,16 @@ const ProfileSection = () => {
   const dispatch = useDispatch();
 
   const [open, setOpen] = useState(false);
+  const { signOut, user } = useContext(UserContext);
+
   /**
    * anchorRef is used on different componets and specifying one type leads to other components throwing an error
    * */
   const anchorRef = useRef(null);
   const handleLogout = async () => {
-    // TODO: logout the user, clear the cookie etc
-    navigate(config.basename + routes.login.url);
-    dispatch({ type: MENU_OPEN, id: '' });
+    await signOut();
+    navigate(config.basename + routes.dashboard.url);
+    dispatch({ type: MENU_OPEN, id: routes.dashboard.id });
   };
 
   const handleClose = (event) => {
@@ -150,15 +153,12 @@ const ProfileSection = () => {
               <ClickAwayListener onClickAway={handleClose}>
                 <MainCard border={false} elevation={16} content={false} boxShadow shadow={theme.shadows[16]}>
                   <Box sx={{ p: 2, pb: 0 }}>
-                    <Stack>
-                      <Stack direction="row" spacing={0.5} alignItems="center">
-                        <Typography variant="h4">Good Morning,</Typography>
-                        <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
-                          Johne Doe
-                        </Typography>
-                      </Stack>
-                      <Typography variant="subtitle2">Project Admin</Typography>
-                    </Stack>
+                    <Typography variant="h4" component="span" sx={{ mr: 1 }}>
+                      Hi,
+                    </Typography>
+                    <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
+                      {user.attributes?.name}
+                    </Typography>
                   </Box>
                   <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 250px)', overflowX: 'hidden' }}>
                     <Box sx={{ pl: 2, pr: 2 }}>

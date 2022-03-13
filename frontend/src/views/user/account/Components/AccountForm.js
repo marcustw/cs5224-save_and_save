@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Box, Button, FormHelperText } from '@mui/material';
+import { Box, Button, FormHelperText, InputAdornment } from '@mui/material';
 
 // third party
 import * as Yup from 'yup';
@@ -53,7 +53,7 @@ const AccountForm = React.forwardRef(({ account = {}, onSubmit, ...others }, ref
         validationSchema={Yup.object().shape({
           name: Yup.string().max(255).required('Name is required'),
           contact: Yup.string()
-            .matches(/^[6-9]\d{8}$/, { message: 'Please enter valid number.', excludeEmptyString: false })
+            .matches(/^[6-9]\d{7}$/, { message: 'Please enter valid number.', excludeEmptyString: false })
             .required('Phone Number is required'),
           email: Yup.string().email('Must be a valid email').required('Discount Price is required')
         })}
@@ -71,17 +71,7 @@ const AccountForm = React.forwardRef(({ account = {}, onSubmit, ...others }, ref
               field="name"
               label="Name"
               fullWidth={true}
-            />
-            <FormikTextInput
-              errors={errors}
-              handleBlur={handleBlur}
-              handleChange={handleChange}
-              values={values}
-              touched={touched}
-              theme={theme}
-              field="contact"
-              label="Phone Contact"
-              type="phone"
+              disabled={true}
             />
             <FormikTextInput
               errors={errors}
@@ -94,6 +84,19 @@ const AccountForm = React.forwardRef(({ account = {}, onSubmit, ...others }, ref
               label="Email"
               type="email"
               fullWidth
+              disabled={true}
+            />
+            <FormikTextInput
+              errors={errors}
+              handleBlur={handleBlur}
+              handleChange={handleChange}
+              values={values}
+              touched={touched}
+              theme={theme}
+              field="contact"
+              label="Phone Contact"
+              type="phone"
+              startAdornment={<InputAdornment position="start">+65</InputAdornment>}
             />
             <FormikTextInput
               errors={errors}

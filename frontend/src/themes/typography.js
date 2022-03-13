@@ -76,7 +76,7 @@ export default function themeTypography(theme) {
           top: 5
         }
       },
-      '& > div > input, & .MuiInputBase-input, & .MuiSelect-select, & > div > textarea': {
+      '& > div > input, & .MuiInputBase-input, & .MuiSelect-select, & > div > textarea, & .MuiInputAdornment-root': {
         padding: '30.5px 14px 11.5px !important'
       },
       '& legend': {
