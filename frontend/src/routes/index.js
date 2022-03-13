@@ -1,5 +1,11 @@
 import { useRoutes } from 'react-router-dom';
 
+import { lazy } from 'react';
+
+// project imports
+import MainLayout from 'layout/MainLayout';
+import Loadable from 'ui-component/Loadable';
+
 // routes
 import MainRoutes from './MainRoutes';
 import AuthenticationRoutes from './AuthenticationRoutes';

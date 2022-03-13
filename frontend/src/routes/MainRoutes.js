@@ -7,6 +7,7 @@ import Loadable from 'ui-component/Loadable';
 import routes from 'routes/routeObject';
 
 // dashboard routing
+const Fallback = Loadable(lazy(() => import('views/dashboard/FallbackRedirect')));
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard')));
 const Analyticpage = Loadable(lazy(() => import('views/analytic')));
 const InventoryManagementPage = Loadable(lazy(() => import('views/store/inventoryManagement')));
@@ -45,8 +46,12 @@ const MainRoutes = {
       element: <CartPage />
     },
     {
+      index: true,
+      element: <Fallback />
+    },
+    {
       path: '*',
-      element: <DashboardDefault />
+      element: <Fallback />
     }
   ]
 };
