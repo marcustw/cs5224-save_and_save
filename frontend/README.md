@@ -13,12 +13,11 @@ npm start
 
 ## Pages routes
 
-- /pages/dashboard
-- /pages/store/items
-- /pages/search/items
-- /pages/user/login
-- /pages/user/register
-- /pages/user/account
+- /dashboard
+- /cart
+- /store/items
+- /search/items
+- /user/account
 
 ## Credit
 
