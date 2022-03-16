@@ -10,6 +10,7 @@ import { useDialogStore } from 'hooks/useDialogStore';
 import { FormEditDialog } from '../Components/EditFormDialog';
 import { handleOnItemAction } from '../utils/itemActions';
 import { ItemActionTypes } from 'constants/item';
+import { AddItemActions } from '../Components/AddItemActions';
 
 const InventoryManagementPage = () => {
   const containerRef = React.useRef(null);
@@ -75,12 +76,14 @@ const InventoryManagementPage = () => {
 
   return (
     <div ref={containerRef} style={{ flex: 1, height: '100%' }}>
+      <AddItemActions />
       <SearchSection handleOnSearch={handleOnSearch} />
       <InfiniteProductLoader
         list={productListRef.current}
         onSellerActionClick={onSellerActionClick}
         totalRowCounts={100}
         loadMoreRows={loadMoreRows}
+        offset={80}
       />
       {/** edit product form dialog  */}
       <FormEditDialog open={!!editItem} onClose={handleOnEditFormClosed} title="Edit Item">

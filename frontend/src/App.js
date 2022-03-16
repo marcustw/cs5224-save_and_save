@@ -18,7 +18,7 @@ import { UserContextProvider } from 'Contexts/UserContext';
 
 // ==============================|| APP ||============================== //
 
-const App = ({ signOut, user }) => {
+const App = ({ signOut = () => {}, user = {} }) => {
   const customization = useSelector((state) => state.customization);
 
   return (
@@ -35,9 +35,11 @@ const App = ({ signOut, user }) => {
   );
 };
 
-export default withAuthenticator(App, {
-  components: {
-    Header,
-    Footer
-  }
-});
+export default App;
+
+// export default withAuthenticator(App, {
+//   components: {
+//     Header,
+//     Footer
+//   }
+// });

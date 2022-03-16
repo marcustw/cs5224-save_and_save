@@ -65,7 +65,7 @@ const ProductForm = React.forwardRef(({ itemData = {}, onSubmit, ...others }, re
           discountPrice: itemData.discountPrice,
           discountReason: itemData.discountReason,
           stockCount: itemData.stockCount,
-          expiredDate: itemData.expiredDate,
+          expiredDate: itemData.expiredDate ?? null,
           description: itemData.description
         }}
         validationSchema={Yup.object().shape({

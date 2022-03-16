@@ -4,7 +4,7 @@ import { InfiniteLoader, List, AutoSizer } from 'react-virtualized';
 import 'react-virtualized/styles.css'; // only needs to be imported once
 import ProductCard from './productCard';
 
-export const InfiniteProductLoader = ({ list, loadMoreRows, totalRowCounts, onBuyerActionClick, onSellerActionClick }) => {
+export const InfiniteProductLoader = ({ list, loadMoreRows, totalRowCounts, onBuyerActionClick, onSellerActionClick, offset = 40 }) => {
   const listRef = React.useRef(list);
   listRef.current = list;
   const { isRowLoaded, rowRenderer } = React.useMemo(() => ({
@@ -30,7 +30,7 @@ export const InfiniteProductLoader = ({ list, loadMoreRows, totalRowCounts, onBu
           <AutoSizer>
             {({ height, width }) => (
               <List
-                height={height - 40}
+                height={height - offset}
                 onRowsRendered={onRowsRendered}
                 ref={registerChild}
                 rowCount={totalRowCounts}
@@ -68,5 +68,7 @@ InfiniteProductLoader.propTypes = {
   loadMoreRows: PropTypes.string,
   totalRowCounts: PropTypes.number,
   onSellerActionClick: PropTypes.func,
-  onBuyerActionClick: PropTypes.func
+  onBuyerActionClick: PropTypes.func,
+  // offset in container when there is sibling on top of it
+  offset: PropTypes.number.isRequired
 };
