@@ -21,7 +21,6 @@ export const FormikTextInput = ({
   setFieldValue,
   ...inputProps
 }) => {
-  console.log('pr', field, values[field]);
   return (
     <FormControl
       fullWidth={fullWidth}

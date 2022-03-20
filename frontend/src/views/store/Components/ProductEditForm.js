@@ -60,6 +60,7 @@ const ProductForm = React.forwardRef(({ itemData = {}, onSubmit, ...others }, re
     <div ref={ref}>
       <Formik
         initialValues={{
+          ...itemData,
           itemName: itemData.itemName,
           originalPrice: itemData.originalPrice,
           discountPrice: itemData.discountPrice,
@@ -211,6 +212,8 @@ export default ProductForm;
 
 ProductForm.propTypes = {
   itemData: PropTypes.shape({
+    id: PropTypes.number,
+    category: PropTypes.category,
     itemName: PropTypes.string,
     originalPrice: PropTypes.number,
     discountPrice: PropTypes.number,
@@ -220,7 +223,8 @@ ProductForm.propTypes = {
     // yyyy-mm-dd
     expiredDate: PropTypes.string,
     description: PropTypes.string,
-    stockCount: PropTypes.number
+    stockCount: PropTypes.number,
+    image: PropTypes.string
   }).isRequired,
   // (data) => void,
   onSubmit: PropTypes.func

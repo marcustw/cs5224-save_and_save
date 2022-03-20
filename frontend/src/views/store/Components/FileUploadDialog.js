@@ -97,5 +97,5 @@ export const FileUploadDialog = ({ onClose, open }) => {
 
 FileUploadDialog.propTypes = {
   onClose: PropTypes.func,
-  open: PropTypes.bool.isRequired,
+  open: PropTypes.bool.isRequired
 };

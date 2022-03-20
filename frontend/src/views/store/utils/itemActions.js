@@ -1,3 +1,4 @@
+import { deleteHandler, DOMAIN_TYPES } from 'axios/util';
 import { ItemActionTypes } from 'constants/item';
 
 export function handleOnItemAction(data) {
@@ -5,6 +6,11 @@ export function handleOnItemAction(data) {
     case ItemActionTypes.DELETE: {
       // call api to delete the item
       const { item } = data;
+      // deleteHandler({
+      //   url: '/product',
+      //   type: DOMAIN_TYPES.PRODUCT,
+      //   params: { id: item.id }
+      // });
       return;
     }
     case ItemActionTypes.UNLIST: {

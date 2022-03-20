@@ -11,11 +11,38 @@ import { FormEditDialog } from '../Components/EditFormDialog';
 import { handleOnItemAction } from '../utils/itemActions';
 import { ItemActionTypes } from 'constants/item';
 import { AddItemActions } from '../Components/AddItemActions';
+import { deleteHandler, DOMAIN_TYPES, get, post } from 'axios/util';
+import { mapItemUIToRequestData } from 'utils/data-mapper';
 
 const InventoryManagementPage = () => {
   const containerRef = React.useRef(null);
   const [editItem, setEditItem] = React.useState();
-  const { productListRef, loadMoreRows } = useProductStore();
+
+  const { fetchProductHandler, updateProductHandler } = React.useMemo(
+    () => ({
+      fetchProductHandler: ({ offset, limit }) => {
+        get({
+          url: '/products',
+          type: DOMAIN_TYPES.PRODUCT,
+          params: {
+            offset,
+            limit
+          }
+        });
+      },
+      updateProductHandler: ({ item }) => {
+        post({
+          url: '/products',
+          params: { id: item.id },
+          type: DOMAIN_TYPES.PRODUCT,
+          data: mapItemUIToRequestData(item)
+        });
+      }
+    }),
+    []
+  );
+
+  const { productListRef, loadMoreRows, loadRows } = useProductStore({ fetchProduct: fetchProductHandler });
   const { openDialog, closeDialog, dialogInfo } = useDialogStore({
     onConfirm: handleOnItemAction
   });
@@ -30,6 +57,7 @@ const InventoryManagementPage = () => {
 
   const handleOnEditSubmit = (item) => {
     setEditItem(undefined);
+    // updateProductHandler({ item })
   };
 
   const onSellerActionClick = (type, item) => {
@@ -73,6 +101,10 @@ const InventoryManagementPage = () => {
       }
     }
   };
+
+  React.useEffect(() => {
+    loadRows();
+  }, [loadRows]);
 
   return (
     <div ref={containerRef} style={{ flex: 1, height: '100%' }}>
