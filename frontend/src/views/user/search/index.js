@@ -1,24 +1,63 @@
+import React from 'react';
 // project imports
 import { InfiniteProductLoader } from 'ui-component/InfiniteProductLoader';
 import SearchSection from 'ui-component/SearchSection';
 
 import { useProductStore } from 'hooks/useProductStore';
+import { searchProducts } from 'axios/productApi';
+
+import { useImmerAtom } from 'jotai/immer';
+import { cartAtom } from 'atoms/cart';
 
 const SearchPage = () => {
-  const { productListRef, loadMoreRows } = useProductStore();
+  const [cart, setCart] = useImmerAtom(cartAtom);
+
+  const { fetchProductHandler } = React.useMemo(
+    () => ({
+      fetchProductHandler: ({ offset, limit, keyword }) => {
+        return searchProducts({
+          offset,
+          limit,
+          keyword: keyword ? keyword : undefined
+        });
+      }
+    }),
+    []
+  );
+
+  const { productListRef, loadMoreRows, onSearch, isFirstFetch, totalItems, loadRows } = useProductStore({
+    fetchProduct: fetchProductHandler
+  });
 
   const onAddToCart = (item, count) => {
-    console.log(count, item);
+    setCart((cart) => {
+      const itemKey = item.id.toString();
+      if (cart[itemKey]) {
+        cart[itemKey].count = Math.min(cart[itemKey].count + count, item.stockCount);
+      } else {
+        cart[itemKey] = {
+          count: Math.min(count, item.stockCount),
+          item
+        };
+      }
+
+      return cart;
+    });
   };
+
+  React.useEffect(() => {
+    loadRows();
+  }, []);
 
   return (
     <div style={{ flex: 1, height: '100%' }}>
-      <SearchSection />
+      <SearchSection handleOnSearch={onSearch} />
       <InfiniteProductLoader
         list={productListRef.current}
         onBuyerActionClick={onAddToCart}
-        totalRowCounts={100}
+        totalRowCounts={totalItems}
         loadMoreRows={loadMoreRows}
+        isFirstFetch={isFirstFetch}
       />
     </div>
   );

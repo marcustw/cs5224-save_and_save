@@ -11,8 +11,8 @@ import { FormEditDialog } from '../Components/EditFormDialog';
 import { handleOnItemAction } from '../utils/itemActions';
 import { ItemActionTypes } from 'constants/item';
 import { AddItemActions } from '../Components/AddItemActions';
-import { deleteHandler, DOMAIN_TYPES, get, post } from 'axios/util';
 import { mapItemUIToRequestData } from 'utils/data-mapper';
+import { searchProducts, updateProductById } from 'axios/productApi';
 
 const InventoryManagementPage = () => {
   const containerRef = React.useRef(null);
@@ -21,21 +21,14 @@ const InventoryManagementPage = () => {
   const { fetchProductHandler, updateProductHandler } = React.useMemo(
     () => ({
       fetchProductHandler: ({ offset, limit }) => {
-        get({
-          url: '/products',
-          type: DOMAIN_TYPES.PRODUCT,
-          params: {
-            offset,
-            limit
-          }
+        return searchProducts({
+          offset,
+          limit
         });
       },
       updateProductHandler: ({ item }) => {
-        post({
-          url: '/products',
-          params: { id: item.id },
-          type: DOMAIN_TYPES.PRODUCT,
-          data: mapItemUIToRequestData(item)
+        return updateProductById({
+          item: mapItemUIToRequestData(item)
         });
       }
     }),
@@ -57,7 +50,7 @@ const InventoryManagementPage = () => {
 
   const handleOnEditSubmit = (item) => {
     setEditItem(undefined);
-    // updateProductHandler({ item })
+    updateProductHandler({ item });
   };
 
   const onSellerActionClick = (type, item) => {

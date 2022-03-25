@@ -1,19 +1,21 @@
 export function mapItemResponseToUIData(item) {
   return {
-    id: item.product_id,
+    id: item.id,
+    storeId: item.store_id,
     itemName: item.name,
-    stockCount: item.remaining_stock,
-    discountPrice: item.new_unit_price,
+    stockCount: item.quantity,
+    discountPrice: item.discounted_price,
     originalPrice: item.actual_price,
-    discountReason: item.reason_discount,
-    expiredDate: item.available_till,
-    image: item.image_url
+    discountReason: item.discounted_reason,
+    expiredDate: item.available_date,
+    image: item.image_link,
+    category: item.category
   };
 }
 
 export function mapItemUIToRequestData(item) {
   return {
-    product_id: item.id,
+    id: item.id,
     name: item.itemName,
     remaining_stock: item.stockCount,
     new_unit_price: item.discountPrice,

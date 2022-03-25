@@ -1,10 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Typography, Box, CircularProgress } from '@mui/material';
 import { InfiniteLoader, List, AutoSizer } from 'react-virtualized';
 import 'react-virtualized/styles.css'; // only needs to be imported once
 import ProductCard from './productCard';
 
-export const InfiniteProductLoader = ({ list, loadMoreRows, totalRowCounts, onBuyerActionClick, onSellerActionClick, offset = 40 }) => {
+export const InfiniteProductLoader = ({
+  list,
+  loadMoreRows,
+  totalRowCounts,
+  onBuyerActionClick,
+  onSellerActionClick,
+  offset = 40,
+  isFirstFetch = true
+}) => {
   const listRef = React.useRef(list);
   listRef.current = list;
   const { isRowLoaded, rowRenderer } = React.useMemo(() => ({
@@ -23,6 +32,23 @@ export const InfiniteProductLoader = ({ list, loadMoreRows, totalRowCounts, onBu
       );
     }
   }));
+
+  const emptyOrLoadingWrapper = (children) => {
+    return (
+      <Box display="flex" justifyContent="center" m={4}>
+        {children}
+      </Box>
+    );
+  };
+
+  if (isFirstFetch) {
+    return emptyOrLoadingWrapper(<CircularProgress />);
+  }
+
+  if (list.length === 0) {
+    return emptyOrLoadingWrapper(<Typography variant="h3">No product found</Typography>);
+  }
+
   return (
     <div style={{ height: 'calc(100% - 50px)' }}>
       <InfiniteLoader isRowLoaded={isRowLoaded} loadMoreRows={loadMoreRows} rowCount={totalRowCounts}>
@@ -69,6 +95,7 @@ InfiniteProductLoader.propTypes = {
   totalRowCounts: PropTypes.number,
   onSellerActionClick: PropTypes.func,
   onBuyerActionClick: PropTypes.func,
+  isFirstFetch: PropTypes.bool,
   // offset in container when there is sibling on top of it
   offset: PropTypes.number.isRequired
 };

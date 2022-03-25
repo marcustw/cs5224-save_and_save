@@ -9,7 +9,7 @@ export const OrderByStore = ({ store, items }) => {
       return total + curVal;
     }, 0);
   return (
-    <MainCard title={storeName}>
+    <MainCard title={`${storeName} (${items.length} item${items.length > 1 ? 's' : ''})`} sx={{ marginTop: 2 }}>
       {items.map((item) => {
         return (
           <Grid container textAlign="right">

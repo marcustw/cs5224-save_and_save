@@ -15,6 +15,7 @@ import NavigationScroll from 'layout/NavigationScroll';
 import { Header } from 'ui-component/awsAuth/Header';
 import { Footer } from 'ui-component/awsAuth/Footer';
 import { UserContextProvider } from 'Contexts/UserContext';
+import { Provider } from 'jotai';
 
 // ==============================|| APP ||============================== //
 
@@ -23,23 +24,25 @@ const App = ({ signOut = () => {}, user = {} }) => {
 
   return (
     <UserContextProvider user={user} signOut={signOut}>
-      <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={themes(customization)}>
-          <CssBaseline />
-          <NavigationScroll>
-            <Routes />
-          </NavigationScroll>
-        </ThemeProvider>
-      </StyledEngineProvider>
+      <Provider>
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={themes(customization)}>
+            <CssBaseline />
+            <NavigationScroll>
+              <Routes />
+            </NavigationScroll>
+          </ThemeProvider>
+        </StyledEngineProvider>
+      </Provider>
     </UserContextProvider>
   );
 };
 
-export default App;
+// export default App;
 
-// export default withAuthenticator(App, {
-//   components: {
-//     Header,
-//     Footer
-//   }
-// });
+export default withAuthenticator(App, {
+  components: {
+    Header,
+    Footer
+  }
+});

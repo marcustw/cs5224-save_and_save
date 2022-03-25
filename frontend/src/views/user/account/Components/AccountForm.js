@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Auth } from 'aws-amplify';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -23,11 +24,7 @@ const AccountForm = React.forwardRef(({ account = {}, onSubmit, ...others }, ref
   const handleOnSubmit = async (values, { setErrors, setStatus, setSubmitting }) => {
     try {
       if (scriptedRef.current) {
-        // call api to update
-        // const response = await onSubmit(values);
-        console.log('submit values', { ...account, values });
-        // TODO change to promise method to update the form
-        onSubmit({ ...account, values });
+        await onSubmit(values);
         setStatus({ success: true });
         setSubmitting(false);
       }
@@ -47,7 +44,7 @@ const AccountForm = React.forwardRef(({ account = {}, onSubmit, ...others }, ref
         initialValues={{
           name: account.name,
           address: account.address,
-          contact: account.contact,
+          contact: account.phone_number,
           email: account.email
         }}
         validationSchema={Yup.object().shape({

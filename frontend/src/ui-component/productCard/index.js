@@ -10,7 +10,7 @@ import { Button, CardActionArea, CardActions, TextField } from '@mui/material';
 import { Divider } from '@mui/material';
 
 import ProductPlaceholder from 'assets/images/milk-bottle-icon.png';
-import { ItemActionTypes, ItemStatus } from 'constants/item';
+import { ItemActionTypes, ItemCategory, ItemCategoryColor, ItemStatus } from 'constants/item';
 
 function getItemStatusColor(status) {
   switch (status) {
@@ -29,7 +29,7 @@ const SellerActions = ({ itemData, onSellerActionClick }) => {
   return (
     <>
       <Divider orientation="vertical" sx={{ marginLeft: '16px', height: '120px' }} />
-      <CardActions sx={{ flexDirection: 'column', display: 'flex', justifyContent: 'space-between', padding: '0px 4px' }}>
+      <CardActions sx={{ flexDirection: 'column', display: 'flex', justifyContent: 'space-between', padding: '0px 4px', width: 100 }}>
         <Button
           size="small"
           color="warning"
@@ -75,7 +75,7 @@ const BuyerActions = ({ itemData = {}, onBuyerActionClick }) => {
   return (
     <>
       <Divider orientation="vertical" sx={{ marginLeft: '16px', height: '120px' }} />
-      <CardActions sx={{ flexDirection: 'column', display: 'flex', justifyContent: 'flex-end', padding: '0px 4px' }}>
+      <CardActions sx={{ flexDirection: 'column', display: 'flex', justifyContent: 'flex-end', padding: '0px 4px', width: 100 }}>
         <TextField
           name="addToCartCount"
           label="Unit"
@@ -108,7 +108,7 @@ const BuyerActions = ({ itemData = {}, onBuyerActionClick }) => {
         <Button
           size="small"
           onClick={() => {
-            onBuyerActionClick(itemData, stockCount);
+            onBuyerActionClick(itemData, itemCount);
           }}
           disabled={disabled}
         >
@@ -133,11 +133,13 @@ const ProductCard = React.forwardRef(({ itemData = {}, onCardClick, onSellerActi
     itemName = 'milk',
     originalPrice = 14.9,
     discountPrice = 10.9,
-    description = 'A breif desscription',
+    category: _category = 'Drinks',
     discountReason = 'Expiring',
     expiredDate = '2022-03-04',
-    stockCount = 5
+    stockCount = 5,
+    image
   } = itemData;
+  const category = _category.trim();
   const withCardAreaActions = (children) => {
     if (onSellerActionClick || !onCardClick) return children;
     return (
@@ -152,26 +154,25 @@ const ProductCard = React.forwardRef(({ itemData = {}, onCardClick, onSellerActi
   };
 
   return withCardAreaActions(
-    <Card sx={{ display: 'flex', padding: '16px', margin: '8px 0px' }} ref={ref}>
+    <Card sx={{ display: 'flex', padding: '16px', margin: '8px 0px', height: 164 }} ref={ref}>
       <Box sx={{ display: 'flex', flexDirection: 'row', flex: '1 0 auto' }}>
-        <CardMedia sx={{ width: '132px', height: '132px' }} component="img" image={ProductPlaceholder} alt="product-image" />
+        <CardMedia sx={{ width: '132px', height: '132px' }} component="img" image={image || ProductPlaceholder} alt="product-image" />
         <CardContent sx={{ flex: '1 0 auto', padding: '0px', paddingBottom: '0px !important', marginLeft: '8px' }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', height: '45px' }}>
-              <div style={{ flexDirection: 'column' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+              <div style={{ flexDirection: 'column', maxWidth: 'calc(100% - 120px)' }}>
                 <Typography component="div" variant="h3">
                   {itemName}
                 </Typography>
                 <Typography variant="caption">by {storeName}</Typography>
+                <Box>
+                  <Chip size="small" label={category} style={{ backgroundColor: ItemCategoryColor[category] }} color="primary" />
+                </Box>
               </div>
-              <Chip label={itemStatus} color={getItemStatusColor(itemStatus)} />
+              {/* <Chip label={itemStatus} color={getItemStatusColor(itemStatus)} /> */}
             </Box>
-            <Typography component="div">Reason: {discountReason}</Typography>
-            <br />
-            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', height: '50px' }}>
-              <Typography component="div" alignSelf="flex-start">
-                {description}
-              </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+              <Typography component="div">{discountReason}</Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'right' }}>
                 <div style={{ textDecoration: 'line-through', textAlign: 'right' }}>
                   <Typography color="text.secondary" variant="caption" align="right">

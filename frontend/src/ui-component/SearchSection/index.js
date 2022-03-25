@@ -40,7 +40,7 @@ const HeaderAvatarStyle = styled(Avatar, { shouldForwardProp })(({ theme }) => (
 
 // ==============================|| SEARCH INPUT ||============================== //
 
-const SearchSection = ({ handleOnSearch = () => {} }) => {
+const SearchSection = ({ handleOnSearch }) => {
   const theme = useTheme();
   const [value, setValue] = useState('');
 

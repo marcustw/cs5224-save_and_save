@@ -28,6 +28,7 @@
     "formik": "^2.2.6",
     "framer-motion": "^4.1.13",
     "history": "^5.0.0",
+    "immer": "^9.0.12",
     "jotai": "^1.6.0",
     "material-ui-popup-state": "^1.8.0",
     "prop-types": "^15.7.2",

@@ -5,6 +5,8 @@ import { Typography, Slide, Dialog, AppBar, Toolbar, IconButton, DialogContent, 
 import CloseIcon from '@mui/icons-material/Close';
 import { useTheme } from '@mui/material/styles';
 import { useDropzone } from 'react-dropzone';
+import { addProduct, addProductsByBatch } from 'axios/productApi';
+import { UserContext } from 'Contexts/UserContext';
 
 const FileUploadConfig = {
   accept: 'text/csv, application/vnd.ms-excel,',
@@ -19,8 +21,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export const FileUploadDialog = ({ onClose, open }) => {
   const theme = useTheme();
+  const { user } = React.useContext(UserContext);
   const [errorMsg, setErrorMsg] = React.useState('');
   const [file, setFile] = React.useState();
+
+  console.log(user.username);
 
   const onDrop = React.useCallback((acceptedFiles, rejections) => {
     acceptedFiles.forEach((file) => {
@@ -49,13 +54,21 @@ export const FileUploadDialog = ({ onClose, open }) => {
     onDrop
   });
 
-  const handleFileUpload = () => {
-    if (errorMsg) return;
+  const handleOnClose = () => {
+    setFile(undefined);
     onClose();
   };
 
+  const handleFileUpload = async () => {
+    if (errorMsg) return;
+    const res = await addProductsByBatch({ csvFile: file, userId: user.username });
+    console.log(res);
+    handleOnClose();
+    setFile(undefined);
+  };
+
   return (
-    <Dialog open={open} onClose={onClose} TransitionComponent={Transition}>
+    <Dialog open={open} onClose={handleOnClose} TransitionComponent={Transition}>
       <AppBar sx={{ position: 'relative' }}>
         <Toolbar>
           <IconButton edge="start" color="inherit" onClick={onClose} aria-label="close">

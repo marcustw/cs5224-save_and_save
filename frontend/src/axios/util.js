@@ -6,17 +6,19 @@ const axiosInstance = axios.create({
 });
 
 export const DOMAIN_TYPES = {
-  PRODUCT: 'product'
+  PRODUCT: 'product',
+  BATCH: 'batch'
 };
 
 const DOMAINS = {
-  [DOMAIN_TYPES.PRODUCT]: 'https://szlsapqode.execute-api.us-east-1.amazonaws.com/v4'
+  [DOMAIN_TYPES.PRODUCT]: 'https://szlsapqode.execute-api.us-east-1.amazonaws.com/v4',
+  [DOMAIN_TYPES.BATCH]: 'https://bzzqw77qce.execute-api.us-east-1.amazonaws.com/default'
 };
 
 function serialize(obj) {
   var str = [];
   for (let p in obj)
-    if (obj.hasOwnProperty(p)) {
+    if (obj.hasOwnProperty(p) && obj[p] !== undefined) {
       str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
     }
   return str.join('&');
@@ -46,11 +48,12 @@ export async function get({ url, params, type }) {
   }
 }
 
-export async function post({ url, data, type }) {
+export async function post({ url, data, type, headers }) {
   try {
     const response = await axiosInstance({
       method: 'post',
       url: formatUrl(type, url),
+      headers,
       data
     });
     return responseHandler(response);
