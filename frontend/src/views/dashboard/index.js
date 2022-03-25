@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
 // material-ui
 import { Grid, Box, Tabs } from '@mui/material';
@@ -25,6 +26,12 @@ function TabPanel(props) {
     </div>
   );
 }
+
+TabPanel.propTypes = {
+  value: PropTypes.any,
+  index: PropTypes.number,
+  children: PropTypes.any
+};
 
 const DashboardPage = () => {
   const [isLoading, setLoading] = useState(true);

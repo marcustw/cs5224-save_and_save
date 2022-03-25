@@ -71,6 +71,7 @@ export async function deleteHandler({ url, data, params, type }) {
     });
     return responseHandler(response);
   } catch (error) {
+    console.log(error);
     return responseHandler(error.toJSON());
   }
 }

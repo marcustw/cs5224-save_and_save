@@ -7,6 +7,7 @@ import ProductCard from './productCard';
 
 export const InfiniteProductLoader = ({
   list,
+  listMap,
   loadMoreRows,
   totalRowCounts,
   onBuyerActionClick,
@@ -16,22 +17,25 @@ export const InfiniteProductLoader = ({
 }) => {
   const listRef = React.useRef(list);
   listRef.current = list;
-  const { isRowLoaded, rowRenderer } = React.useMemo(() => ({
-    isRowLoaded: ({ index }) => {
-      return !!listRef.current[index];
-    },
-    rowRenderer: ({ key, index, style }) => {
-      return (
-        <div key={key} style={style}>
-          <ProductCard
-            itemData={listRef.current[index]}
-            onSellerActionClick={onSellerActionClick}
-            onBuyerActionClick={onBuyerActionClick}
-          />
-        </div>
-      );
-    }
-  }));
+  const { isRowLoaded, rowRenderer } = React.useMemo(
+    () => ({
+      isRowLoaded: ({ index }) => {
+        return !!listRef.current[index];
+      },
+      rowRenderer: ({ key, index, style }) => {
+        return (
+          <div key={key} style={style}>
+            <ProductCard
+              itemData={listMap[listRef.current[index]]}
+              onSellerActionClick={onSellerActionClick}
+              onBuyerActionClick={onBuyerActionClick}
+            />
+          </div>
+        );
+      }
+    }),
+    [onSellerActionClick, onBuyerActionClick, listMap]
+  );
 
   const emptyOrLoadingWrapper = (children) => {
     return (
@@ -73,23 +77,12 @@ export const InfiniteProductLoader = ({
 };
 
 InfiniteProductLoader.propTypes = {
-  list: PropTypes.arrayOf(
-    PropTypes.shape({
-      itemName: PropTypes.string,
-      originalPrice: PropTypes.number,
-      discountPrice: PropTypes.number,
-      // refer to enum ItemCondition
-      discountReason: PropTypes.string,
-      stockCount: PropTypes.number,
-      // yyyy-mm-dd
-      expiredDate: PropTypes.string,
-      description: PropTypes.string,
-      stockCount: PropTypes.nunber,
-      // refer to enum ItemStatus
-      itemStatus: PropTypes.string,
-      storeName: PropTypes.string
-    })
-  ),
+  list: PropTypes.arrayOf(PropTypes.number),
+  // { current: { [itemid]: itemData } }
+  /**
+   * Item Data refer to mapItemResponseToUIData
+   */
+  listMap: PropTypes.any.isRequired,
   // ({ startIndex, stopIndex }) => Promise
   loadMoreRows: PropTypes.string,
   totalRowCounts: PropTypes.number,

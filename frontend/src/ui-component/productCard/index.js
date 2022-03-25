@@ -1,16 +1,22 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import Chip from '@mui/material/Chip';
-import { Button, CardActionArea, CardActions, TextField } from '@mui/material';
-import { Divider } from '@mui/material';
+import {
+  Button,
+  CardActionArea,
+  CardActions,
+  TextField,
+  Box,
+  Stack,
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Chip,
+  Divider
+} from '@mui/material';
 
 import ProductPlaceholder from 'assets/images/milk-bottle-icon.png';
-import { ItemActionTypes, ItemCategory, ItemCategoryColor, ItemStatus } from 'constants/item';
+import { ItemActionTypes, ItemCategoryColor, ItemStatus } from 'constants/item';
 
 function getItemStatusColor(status) {
   switch (status) {
@@ -128,14 +134,14 @@ BuyerActions.propTypes = {
 
 const ProductCard = React.forwardRef(({ itemData = {}, onCardClick, onSellerActionClick, onBuyerActionClick }, ref) => {
   const {
-    itemStatus = ItemStatus.EXPIRING,
+    // itemStatus = ItemStatus.EXPIRING,
     storeName = 'Hello Shop',
     itemName = 'milk',
     originalPrice = 14.9,
     discountPrice = 10.9,
     category: _category = 'Drinks',
     discountReason = 'Expiring',
-    expiredDate = '2022-03-04',
+    expiredDate,
     stockCount = 5,
     image
   } = itemData;
@@ -172,8 +178,15 @@ const ProductCard = React.forwardRef(({ itemData = {}, onCardClick, onSellerActi
               {/* <Chip label={itemStatus} color={getItemStatusColor(itemStatus)} /> */}
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-              <Typography component="div">{discountReason}</Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'right' }}>
+              <Stack>
+                <Typography component="div">{discountReason}</Typography>
+                <Typography>
+                  {expiredDate?.getFullYear
+                    ? `Available till: ${expiredDate.getFullYear()}-${expiredDate.getMonth() + 1}-${expiredDate.getDate()}`
+                    : ''}
+                </Typography>
+              </Stack>
+              <Stack justifyContent="flex-end" alignItems="right">
                 <div style={{ textDecoration: 'line-through', textAlign: 'right' }}>
                   <Typography color="text.secondary" variant="caption" align="right">
                     SGD {originalPrice.toFixed(2)}
@@ -183,7 +196,7 @@ const ProductCard = React.forwardRef(({ itemData = {}, onCardClick, onSellerActi
                 <Typography color="text.secondary" align="right">
                   In stock: {stockCount}
                 </Typography>
-              </Box>
+              </Stack>
             </Box>
           </Box>
         </CardContent>
@@ -202,8 +215,8 @@ ProductCard.propTypes = {
     // refer to enum ItemCondition
     discountReason: PropTypes.string,
     stockCount: PropTypes.number,
-    // yyyy-mm-dd
-    expiredDate: PropTypes.string,
+    // date object
+    expiredDate: PropTypes.any,
     description: PropTypes.string,
     stockCount: PropTypes.nunber,
     // refer to enum ItemStatus

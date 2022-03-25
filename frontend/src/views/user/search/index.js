@@ -10,7 +10,7 @@ import { useImmerAtom } from 'jotai/immer';
 import { cartAtom } from 'atoms/cart';
 
 const SearchPage = () => {
-  const [cart, setCart] = useImmerAtom(cartAtom);
+  const [, setCart] = useImmerAtom(cartAtom);
 
   const { fetchProductHandler } = React.useMemo(
     () => ({
@@ -25,7 +25,7 @@ const SearchPage = () => {
     []
   );
 
-  const { productListRef, loadMoreRows, onSearch, isFirstFetch, totalItems, loadRows } = useProductStore({
+  const { productMapRef, productListRef, loadMoreRows, onSearch, isFirstFetch, totalItems, loadRows } = useProductStore({
     fetchProduct: fetchProductHandler
   });
 
@@ -47,13 +47,14 @@ const SearchPage = () => {
 
   React.useEffect(() => {
     loadRows();
-  }, []);
+  }, [loadRows]);
 
   return (
     <div style={{ flex: 1, height: '100%' }}>
       <SearchSection handleOnSearch={onSearch} />
       <InfiniteProductLoader
         list={productListRef.current}
+        listMap={productMapRef.current}
         onBuyerActionClick={onAddToCart}
         totalRowCounts={totalItems}
         loadMoreRows={loadMoreRows}

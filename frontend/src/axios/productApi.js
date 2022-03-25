@@ -10,14 +10,15 @@ export function getProductById({ id }) {
   });
 }
 
-export function searchProducts({ offset = 0, limit, keyword }) {
+export function searchProducts({ offset = 0, limit = 20, keyword, store_id }) {
   return get({
     url: '/products',
     type: DOMAIN_TYPES.PRODUCT,
     params: {
       offset,
-      // limit,
-      keyword
+      limit,
+      keyword,
+      store_id
     }
   });
 }
@@ -26,7 +27,7 @@ export function deleteProductById({ id }) {
   return deleteHandler({
     url: '/product',
     type: DOMAIN_TYPES.PRODUCT,
-    params: {
+    data: {
       id
     }
   });

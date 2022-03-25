@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Auth } from 'aws-amplify';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';

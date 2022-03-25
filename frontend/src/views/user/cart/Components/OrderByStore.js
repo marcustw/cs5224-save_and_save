@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Divider, Grid, Typography } from '@mui/material';
 import MainCard from 'ui-component/cards/MainCard';
 
@@ -41,4 +42,13 @@ export const OrderByStore = ({ store, items }) => {
       </Typography>
     </MainCard>
   );
+};
+
+OrderByStore.propTypes = {
+  store: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string
+  }).isRequired,
+  // refer to data mapper for item data stuct with additional count: number
+  items: PropTypes.arrayOf(PropTypes.object)
 };

@@ -8,22 +8,25 @@ import { ActionConfirmationDialog } from 'ui-component/ActionConfirmationDialog'
 import { useProductStore } from 'hooks/useProductStore';
 import { useDialogStore } from 'hooks/useDialogStore';
 import { FormEditDialog } from '../Components/EditFormDialog';
-import { handleOnItemAction } from '../utils/itemActions';
 import { ItemActionTypes } from 'constants/item';
 import { AddItemActions } from '../Components/AddItemActions';
 import { mapItemUIToRequestData } from 'utils/data-mapper';
-import { searchProducts, updateProductById } from 'axios/productApi';
+import { deleteProductById, searchProducts, updateProductById } from 'axios/productApi';
+
+import { UserContext } from 'Contexts/UserContext';
 
 const InventoryManagementPage = () => {
+  const { user } = React.useContext(UserContext);
   const containerRef = React.useRef(null);
   const [editItem, setEditItem] = React.useState();
 
   const { fetchProductHandler, updateProductHandler } = React.useMemo(
     () => ({
-      fetchProductHandler: ({ offset, limit }) => {
+      fetchProductHandler: ({ offset, limit, keyword }) => {
         return searchProducts({
           offset,
-          limit
+          limit,
+          keyword: keyword || undefined
         });
       },
       updateProductHandler: ({ item }) => {
@@ -35,22 +38,53 @@ const InventoryManagementPage = () => {
     []
   );
 
-  const { productListRef, loadMoreRows, loadRows } = useProductStore({ fetchProduct: fetchProductHandler });
+  const { productMapRef, productListRef, loadMoreRows, loadRows, onSearch, isFirstFetch, totalItems, updateItemData, deleteItemData } =
+    useProductStore({
+      fetchProduct: fetchProductHandler,
+      store_id: user.username
+    });
+
+  const handleOnItemAction = React.useCallback(
+    async (data) => {
+      switch (data.type) {
+        case ItemActionTypes.DELETE: {
+          // call api to delete the item
+          const { item } = data;
+          const res = await deleteProductById({ id: item.id });
+          if (res.status === 200) {
+            deleteItemData(item);
+          }
+        }
+        case ItemActionTypes.UNLIST: {
+          // call api to unlist the item
+          const { item } = data;
+          return;
+        }
+        case ItemActionTypes.LIST: {
+          // call api to list the item
+          const { item } = data;
+          return;
+        }
+      }
+    },
+    [deleteItemData]
+  );
+
   const { openDialog, closeDialog, dialogInfo } = useDialogStore({
     onConfirm: handleOnItemAction
   });
-
-  const handleOnSearch = (value) => {
-    console.log('search value', value);
-  };
 
   const handleOnEditFormClosed = () => {
     setEditItem(undefined);
   };
 
-  const handleOnEditSubmit = (item) => {
-    setEditItem(undefined);
-    updateProductHandler({ item });
+  const handleOnEditSubmit = async (item) => {
+    const response = await updateProductHandler({ item: item.updated });
+    if (response.status === 200) {
+      updateItemData(item.updated);
+      setEditItem(undefined);
+    }
+    return response.status;
   };
 
   const onSellerActionClick = (type, item) => {
@@ -102,13 +136,15 @@ const InventoryManagementPage = () => {
   return (
     <div ref={containerRef} style={{ flex: 1, height: '100%' }}>
       <AddItemActions />
-      <SearchSection handleOnSearch={handleOnSearch} />
+      <SearchSection handleOnSearch={onSearch} />
       <InfiniteProductLoader
         list={productListRef.current}
+        listMap={productMapRef.current}
         onSellerActionClick={onSellerActionClick}
-        totalRowCounts={100}
+        totalRowCounts={totalItems}
         loadMoreRows={loadMoreRows}
         offset={80}
+        isFirstFetch={isFirstFetch}
       />
       {/** edit product form dialog  */}
       <FormEditDialog open={!!editItem} onClose={handleOnEditFormClosed} title="Edit Item">

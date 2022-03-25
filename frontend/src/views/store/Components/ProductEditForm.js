@@ -21,11 +21,15 @@ import { ItemCondition } from 'constants/item';
 const DiscountReasons = [
   {
     value: ItemCondition.EXPIRING,
-    label: 'Expiring'
+    label: 'Expiring Soon'
   },
   {
-    value: ItemCondition.DEFECT,
-    label: 'Defect'
+    value: ItemCondition.SEASONAL,
+    label: 'Season Offer'
+  },
+  {
+    value: ItemCondition.DISCOUNT,
+    label: 'Normal Discount'
   }
 ];
 
@@ -38,11 +42,7 @@ const ProductForm = React.forwardRef(({ itemData = {}, onSubmit, ...others }, re
   const handleOnSubmit = async (values, { setErrors, setStatus, setSubmitting }) => {
     try {
       if (scriptedRef.current) {
-        // call api to update
-        // const response = await onSubmit(values);
-        console.log('submit values', { ...itemData, values });
-        // TODO change to promise method to update the form
-        onSubmit({ ...itemData, values });
+        await onSubmit({ original: itemData, updated: values });
         setStatus({ success: true });
         setSubmitting(false);
       }
@@ -66,8 +66,8 @@ const ProductForm = React.forwardRef(({ itemData = {}, onSubmit, ...others }, re
           discountPrice: itemData.discountPrice,
           discountReason: itemData.discountReason,
           stockCount: itemData.stockCount,
-          expiredDate: itemData.expiredDate ?? null,
-          description: itemData.description
+          expiredDate: itemData.expiredDate ?? null
+          // description: itemData.description
         }}
         validationSchema={Yup.object().shape({
           itemName: Yup.string().max(255).required('Name is required'),
@@ -103,7 +103,7 @@ const ProductForm = React.forwardRef(({ itemData = {}, onSubmit, ...others }, re
               label="Product Name"
               fullWidth={true}
             />
-            <FormikTextInput
+            {/* <FormikTextInput
               errors={errors}
               handleBlur={handleBlur}
               handleChange={handleChange}
@@ -115,7 +115,7 @@ const ProductForm = React.forwardRef(({ itemData = {}, onSubmit, ...others }, re
               fullWidth={true}
               multiline={true}
               rows={1}
-            />
+            /> */}
             <Box mr={2} display="inline-block">
               <FormikSelectInput
                 errors={errors}
@@ -125,8 +125,8 @@ const ProductForm = React.forwardRef(({ itemData = {}, onSubmit, ...others }, re
                 touched={touched}
                 theme={theme}
                 selectSx={{ minHeight: 51 }}
-                formControlStyle={{ minWidth: 150 }}
-                field="reason"
+                formControlStyle={{ minWidth: 200 }}
+                field="discountReason"
                 label="Discount Reason"
                 menuItems={DiscountReasons}
               />

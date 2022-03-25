@@ -154,3 +154,16 @@ export default function ReactVirtualizedTable({ columns, rows, onRowClick }) {
     </Paper>
   );
 }
+
+ReactVirtualizedTable.propTypes = {
+  columns: PropTypes.arrayOf(
+    PropTypes.shape({
+      dataKey: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+      numeric: PropTypes.bool,
+      width: PropTypes.number.isRequired
+    })
+  ).isRequired,
+  rows: PropTypes.array.isRequired,
+  onRowClick: PropTypes.func.isRequired
+};

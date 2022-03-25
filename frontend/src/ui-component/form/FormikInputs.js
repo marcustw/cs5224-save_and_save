@@ -162,8 +162,8 @@ export const FormikDatePicker = ({
               setFieldValue(field, '');
               return;
             }
-            const date = `${val.getFullYear()}-${val.getMonth() + 1}-${val.getDate()}`;
-            setFieldValue(field, date);
+            // const date = `${val.getFullYear()}-${val.getMonth() + 1}-${val.getDate()}`;
+            setFieldValue(field, val);
           }}
           renderInput={(params) => <TextField {...params} />}
         />

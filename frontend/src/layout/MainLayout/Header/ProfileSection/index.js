@@ -16,7 +16,6 @@ import {
   ListItemText,
   Paper,
   Popper,
-  Stack,
   Typography
 } from '@mui/material';
 

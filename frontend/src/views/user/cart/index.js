@@ -16,28 +16,6 @@ import { MENU_OPEN } from 'store/actions';
 import routes from 'routes/routeObject';
 import { cartAtom } from 'atoms/cart';
 
-const MockStore = {
-  name: '7-11'
-};
-
-const items = [
-  {
-    itemName: 'Milk',
-    count: 2,
-    discountPrice: 4.99
-  },
-  {
-    itemName: 'Bread',
-    count: 1,
-    discountPrice: 2.99
-  },
-  {
-    itemName: 'Fruit',
-    count: 5,
-    discountPrice: 0.99
-  }
-];
-
 const CartPage = () => {
   const cart = useAtomValue(cartAtom);
   const handleOnDialogClose = () => {
@@ -103,7 +81,7 @@ const CartPage = () => {
         </Grid>
       </Grid>
       <TotalAmount amount={totalAmount} />
-      {shopItems.map(({ store, items }, index) => (
+      {shopItems.map(({ store, items }) => (
         <OrderByStore key={store.id} store={store} items={items} />
       ))}
       <ActionConfirmationDialog

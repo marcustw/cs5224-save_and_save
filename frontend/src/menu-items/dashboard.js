@@ -2,9 +2,6 @@
 import { IconDashboard } from '@tabler/icons';
 import routes from 'routes/routeObject';
 
-// constant
-const icons = { IconDashboard };
-
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
 const dashboard = {

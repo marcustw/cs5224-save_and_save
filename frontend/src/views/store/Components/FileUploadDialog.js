@@ -5,7 +5,7 @@ import { Typography, Slide, Dialog, AppBar, Toolbar, IconButton, DialogContent, 
 import CloseIcon from '@mui/icons-material/Close';
 import { useTheme } from '@mui/material/styles';
 import { useDropzone } from 'react-dropzone';
-import { addProduct, addProductsByBatch } from 'axios/productApi';
+import { addProductsByBatch } from 'axios/productApi';
 import { UserContext } from 'Contexts/UserContext';
 
 const FileUploadConfig = {
@@ -24,8 +24,6 @@ export const FileUploadDialog = ({ onClose, open }) => {
   const { user } = React.useContext(UserContext);
   const [errorMsg, setErrorMsg] = React.useState('');
   const [file, setFile] = React.useState();
-
-  console.log(user.username);
 
   const onDrop = React.useCallback((acceptedFiles, rejections) => {
     acceptedFiles.forEach((file) => {

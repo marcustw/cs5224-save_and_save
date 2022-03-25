@@ -15,21 +15,24 @@ const AccountPage = () => {
     await Auth.updateUserAttributes(user, { address: values.address, phone_number: `+65${values.contact}` });
   };
 
-  React.useEffect(async () => {
-    const user = await Auth.currentAuthenticatedUser();
-    if (user.attributes) {
-      // call api to get address info & contact
-      console.log(user.attributes.phone_number?.replace('+65', ''));
-      setUser(user);
-      setAccount({
-        name: user.attributes.name,
-        email: user.attributes.email,
-        address: user.attributes.address,
-        phone_number: user.attributes.phone_number?.replace('+65', '')
-      });
-    } else {
-      setAccount(undefined);
-    }
+  React.useEffect(() => {
+    const syncUser = async () => {
+      const user = await Auth.currentAuthenticatedUser();
+      if (user.attributes) {
+        // call api to get address info & contact
+        console.log(user.attributes.phone_number?.replace('+65', ''));
+        setUser(user);
+        setAccount({
+          name: user.attributes.name,
+          email: user.attributes.email,
+          address: user.attributes.address,
+          phone_number: user.attributes.phone_number?.replace('+65', '')
+        });
+      } else {
+        setAccount(undefined);
+      }
+    };
+    syncUser();
   }, []);
 
   return (
