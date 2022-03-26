@@ -12,7 +12,8 @@ import { Formik } from 'formik';
 // project imports
 import useScriptRef from 'hooks/useScriptRef';
 import AnimateButton from 'ui-component/extended/AnimateButton';
-import { FormikTextInput } from 'ui-component/form/FormikInputs';
+import { FormikRadioGroup, FormikTextInput } from 'ui-component/form/FormikInputs';
+import { ACCOUNT_SELLER_OPTIONS } from 'constants/user';
 
 // ===========================|| FIREBASE - REGISTER ||=========================== //
 
@@ -28,7 +29,6 @@ const AccountForm = React.forwardRef(({ account = {}, onSubmit, ...others }, ref
         setSubmitting(false);
       }
     } catch (err) {
-      console.error(err);
       if (scriptedRef.current) {
         setStatus({ success: false });
         setErrors({ submit: err.message });
@@ -41,10 +41,15 @@ const AccountForm = React.forwardRef(({ account = {}, onSubmit, ...others }, ref
     <div ref={ref}>
       <Formik
         initialValues={{
+          ...account,
           name: account.name,
           address: account.address,
           contact: account.phone_number,
-          email: account.email
+          mail_id: account.email,
+          email: account.email,
+          authorized_to_sell: account.authorized_to_sell ? 1 : 0,
+          first_name: account.first_name,
+          last_name: account.last_name
         }}
         validationSchema={Yup.object().shape({
           name: Yup.string().max(255).required('Name is required'),
@@ -68,6 +73,27 @@ const AccountForm = React.forwardRef(({ account = {}, onSubmit, ...others }, ref
               label="Name"
               fullWidth={true}
               disabled={true}
+            />
+            <FormikTextInput
+              errors={errors}
+              handleBlur={handleBlur}
+              handleChange={handleChange}
+              values={values}
+              touched={touched}
+              theme={theme}
+              field="first_name"
+              label="First Name"
+              sx={{ mr: 2 }}
+            />
+            <FormikTextInput
+              errors={errors}
+              handleBlur={handleBlur}
+              handleChange={handleChange}
+              values={values}
+              touched={touched}
+              theme={theme}
+              field="last_name"
+              label="Last Name"
             />
             <FormikTextInput
               errors={errors}
@@ -106,6 +132,19 @@ const AccountForm = React.forwardRef(({ account = {}, onSubmit, ...others }, ref
               fullWidth={true}
               multiline={true}
               rows={1}
+            />
+            <FormikRadioGroup
+              errors={errors}
+              handleBlur={handleBlur}
+              handleChange={handleChange}
+              values={values}
+              touched={touched}
+              theme={theme}
+              field="authorized_to_sell"
+              label="Selling Permission"
+              defaultValue={0}
+              options={ACCOUNT_SELLER_OPTIONS}
+              optionInRow={true}
             />
             {errors.submit && (
               <Box sx={{ mt: 3 }}>

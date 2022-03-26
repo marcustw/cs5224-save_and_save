@@ -6,13 +6,15 @@ const axiosInstance = axios.create({
 });
 
 export const DOMAIN_TYPES = {
+  ALL: 'all',
   PRODUCT: 'product',
   BATCH: 'batch'
 };
 
 const DOMAINS = {
+  [DOMAIN_TYPES.ALL]: 'https://szlsapqode.execute-api.us-east-1.amazonaws.com/v4',
   [DOMAIN_TYPES.PRODUCT]: 'https://szlsapqode.execute-api.us-east-1.amazonaws.com/v4',
-  [DOMAIN_TYPES.BATCH]: 'https://bzzqw77qce.execute-api.us-east-1.amazonaws.com/default'
+  [DOMAIN_TYPES.BATCH]: 'https://szlsapqode.execute-api.us-east-1.amazonaws.com/v4'
 };
 
 function serialize(obj) {

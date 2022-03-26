@@ -1,7 +1,19 @@
 import PropTypes from 'prop-types';
 
 // material-ui
-import { FormControl, FormHelperText, InputLabel, OutlinedInput, TextField, MenuItem, Select } from '@mui/material';
+import {
+  RadioGroup,
+  FormControlLabel,
+  FormLabel,
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+  MenuItem,
+  Select,
+  Radio
+} from '@mui/material';
 import DatePicker from '@mui/lab/DatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -93,7 +105,16 @@ export const FormikSelectInput = ({
       sx={{ ...theme.typography.customInput, ...formControlStyle }}
     >
       <InputLabel id={labelId}>{label}</InputLabel>
-      <Select onBlur={handleBlur} sx={selectSx} autoWidth={false} labelId={labelId} label={label} id={field} value={values[field]}>
+      <Select
+        name={field}
+        onBlur={handleBlur}
+        sx={selectSx}
+        autoWidth={false}
+        labelId={labelId}
+        label={label}
+        id={field}
+        value={values[field]}
+      >
         {menuItems.map((option) => (
           <MenuItem key={option.value} value={option.value}>
             {option.label}
@@ -186,4 +207,68 @@ FormikDatePicker.propTypes = {
   theme: PropTypes.any,
   fullWidth: PropTypes.bool,
   formControlStyle: PropTypes.object
+};
+
+export const FormikRadioGroup = ({
+  errors,
+  handleChange,
+  touched,
+  values,
+  label,
+  field,
+  theme,
+  fullWidth,
+  formControlStyle = {},
+  options,
+  defaultValue,
+  optionInRow
+}) => {
+  const labelId = `radio-buttons-${label}`;
+  console.log(values[field]);
+  return (
+    <FormControl
+      fullWidth={fullWidth}
+      error={Boolean(touched[field] && errors[field])}
+      sx={{ ...theme.typography.customInput, ...formControlStyle }}
+    >
+      <FormLabel id={labelId} sx={{ mb: 3 }}>
+        {label}
+      </FormLabel>
+      <RadioGroup
+        name={field}
+        aria-labelledby={labelId}
+        value={values[field]}
+        defaultValue={defaultValue}
+        onChange={handleChange}
+        row={optionInRow}
+      >
+        {options.map((option) => (
+          <FormControlLabel key={option.value} value={option.value} control={<Radio />} label={option.label} />
+        ))}
+      </RadioGroup>
+    </FormControl>
+  );
+};
+
+FormikRadioGroup.propTypes = {
+  // formik
+  errors: PropTypes.object,
+  handleChange: PropTypes.func,
+  touched: PropTypes.object,
+  values: PropTypes.object,
+  // form value
+  label: PropTypes.string.isRequired,
+  field: PropTypes.string.isRequired,
+  // consit fo theme.typography.customInput to style the input
+  theme: PropTypes.any,
+  fullWidth: PropTypes.bool,
+  formControlStyle: PropTypes.object,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      label: PropTypes.string
+    })
+  ),
+  defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  optionInRow: PropTypes.bool
 };
