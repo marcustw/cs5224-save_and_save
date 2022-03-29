@@ -67,6 +67,7 @@ class MuiVirtualizedTable extends React.PureComponent {
         style={{ height: rowHeight }}
         align={(columnIndex != null && columns[columnIndex].numeric) || false ? 'right' : 'left'}
       >
+        {columns[columnIndex].prefix}
         {cellData}
       </TableCell>
     );
@@ -89,13 +90,13 @@ class MuiVirtualizedTable extends React.PureComponent {
   };
 
   render() {
-    const { classes, columns, rowHeight, headerHeight, ...tableProps } = this.props;
+    const { classes, columns, rowHeight, headerHeight, fixedWidth, ...tableProps } = this.props;
     return (
       <AutoSizer>
         {({ height, width }) => (
           <Table
             height={height}
-            width={width}
+            width={fixedWidth || width}
             rowHeight={rowHeight}
             gridStyle={{
               direction: 'inherit'
@@ -141,7 +142,8 @@ MuiVirtualizedTable.propTypes = {
   ).isRequired,
   headerHeight: PropTypes.number,
   onRowClick: PropTypes.func,
-  rowHeight: PropTypes.number
+  rowHeight: PropTypes.number,
+  fixedWidth: PropTypes.number
 };
 
 const defaultTheme = createTheme();

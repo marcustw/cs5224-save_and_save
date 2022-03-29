@@ -42,3 +42,9 @@ export const ItemCategoryColor = {
   [ItemCategory.ALCOHOL]: indigo[300],
   [ItemCategory.DRINKS]: teal[300]
 };
+
+export const OrderStatus = {
+  PREPARE: '0',
+  TO_COLLECT: '1',
+  RECEIVED: '2'
+};

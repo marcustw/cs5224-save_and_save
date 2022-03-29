@@ -224,7 +224,6 @@ export const FormikRadioGroup = ({
   optionInRow
 }) => {
   const labelId = `radio-buttons-${label}`;
-  console.log(values[field]);
   return (
     <FormControl
       fullWidth={fullWidth}

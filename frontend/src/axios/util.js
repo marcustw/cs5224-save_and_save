@@ -50,11 +50,11 @@ export async function get({ url, params, type }) {
   }
 }
 
-export async function post({ url, data, type, headers }) {
+export async function post({ url, data, type, headers, params }) {
   try {
     const response = await axiosInstance({
       method: 'post',
-      url: formatUrl(type, url),
+      url: formatUrl(type, url + (params ? '?' + serialize(params) : '')),
       headers,
       data
     });

@@ -54,10 +54,9 @@ export function addProductsByBatch({ csvFile, userId }) {
     url: '/csv_handler',
     type: DOMAIN_TYPES.BATCH,
     headers: {
-      'Content-Type': 'multipart/form-data',
-      operation: 'upload_csv',
-      user_id: userId
+      'Content-Type': 'multipart/form-data'
     },
+    params: { store_id: userId },
     data: csvFile
   });
 }

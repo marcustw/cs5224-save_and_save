@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import { DialogTitle, DialogActions, Dialog, DialogContent, DialogContentText, Button, Typography } from '@mui/material';
 
-export const ActionConfirmationDialog = ({ data, handleClose, open, title, description, cancelText, confirmText }) => {
+export const ActionConfirmationDialog = ({ data, handleClose, open, title, description, cancelText, confirmText, noDimiss }) => {
   return (
     <Dialog
       sx={{ '& .MuiDialog-paper': { width: '80%', maxHeight: 435 } }}
       maxWidth="xs"
       open={open}
-      onClose={() => handleClose('cancel')}
+      onClose={noDimiss ? undefined : () => handleClose('cancel')}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
@@ -41,5 +41,6 @@ ActionConfirmationDialog.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   cancelText: PropTypes.string.isRequired,
-  confirmText: PropTypes.string.isRequired
+  confirmText: PropTypes.string.isRequired,
+  noDimiss: PropTypes.bool
 };

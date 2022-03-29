@@ -1,46 +1,37 @@
 export const TABLE_COLUMNS = {
-  TO_COLLECT: [
+  PREPARE: [
     {
-      width: 150,
+      width: 500,
       label: 'Receipt No.',
-      dataKey: 'receipt_id'
+      dataKey: 'orderId',
+      prefix: 'INV '
     },
     {
-      width: 150,
-      label: 'Collection Date',
-      dataKey: 'collection_date'
+      width: 400,
+      label: 'Amount',
+      dataKey: 'total_cost',
+      prefix: 'SGD ',
+      numeric: true
+    }
+  ],
+  TO_COLLECT: [
+    {
+      width: 300,
+      label: 'Receipt No.',
+      dataKey: 'orderId',
+      prefix: 'INV '
     },
     {
       width: 400,
       label: 'Store',
-      dataKey: 'store'
+      dataKey: 'storeId'
     },
     {
       width: 200,
       label: 'Amount',
-      dataKey: 'amount'
-    }
-  ],
-  FOR_COLLECT: [
-    {
-      width: 150,
-      label: 'Receipt No.',
-      dataKey: 'receipt_id'
-    },
-    {
-      width: 150,
-      label: 'Collection Date',
-      dataKey: 'collection_date'
-    },
-    {
-      width: 400,
-      label: 'Recipient',
-      dataKey: 'recipient'
-    },
-    {
-      width: 200,
-      label: 'Amount',
-      dataKey: 'amount'
+      dataKey: 'total_cost',
+      prefix: 'SGD ',
+      numeric: true
     }
   ]
 };

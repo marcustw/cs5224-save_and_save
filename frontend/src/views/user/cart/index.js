@@ -1,10 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useAtomValue } from 'jotai';
+import { useAtom } from 'jotai';
 
 // material ui
-import { Button, Grid, Typography, Box } from '@mui/material';
+import { Button, Grid, Typography, Box, Backdrop, CircularProgress } from '@mui/material';
 import { useDialogStore } from 'hooks/useDialogStore';
 import { ActionConfirmationDialog } from 'ui-component/ActionConfirmationDialog';
 
@@ -15,10 +15,18 @@ import config from 'config';
 import { MENU_OPEN } from 'store/actions';
 import routes from 'routes/routeObject';
 import { cartAtom } from 'atoms/cart';
+import { makeOrder } from 'axios/orderApi';
+import { UserContext } from 'Contexts/UserContext';
 
 const CartPage = () => {
-  const cart = useAtomValue(cartAtom);
+  const [cart, setCart] = useAtom(cartAtom);
+  const { user } = React.useContext(UserContext);
+  const [loading, setLoading] = React.useState(false);
+  const orderSuccessRef = React.useRef(false);
   const handleOnDialogClose = () => {
+    if (orderSuccessRef.current) {
+      setCart({});
+    }
     navigate(config.basename + routes.dashboard.url);
     dispatch({ type: MENU_OPEN, id: routes.dashboard.id });
   };
@@ -27,8 +35,6 @@ const CartPage = () => {
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  console.log(cart);
 
   const { shopItems, totalAmount } = React.useMemo(() => {
     const shopItems = {};
@@ -55,12 +61,21 @@ const CartPage = () => {
     };
   }, [cart]);
 
-  const handleOnProceed = () => {
-    console.log('Confirm Order');
-    openDialog({
-      title: 'Purchase Succeed',
-      description: `Your receipt is ${'INV123455'}. You may check your purchase order in the dashboard.`
+  const handleOnProceed = async () => {
+    setLoading(true);
+    const { status, data } = await makeOrder({
+      cartItems: cart,
+      userid: user.username,
+      totalPrice: totalAmount
     });
+    orderSuccessRef.current = status === 200;
+    setLoading(false);
+    if (orderSuccessRef.current) {
+      openDialog({
+        title: 'Purchase Succeed',
+        description: `Your receipt is INV#${data.purchase_id}. You may check your purchase order in the dashboard.`
+      });
+    }
   };
 
   if (shopItems.length === 0) {
@@ -91,7 +106,11 @@ const CartPage = () => {
         description={dialogInfo.description}
         confirmText="OK"
         data={dialogInfo.extraData}
+        noDimiss={true}
       />
+      <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
   );
 };

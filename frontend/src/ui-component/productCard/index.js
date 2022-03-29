@@ -35,7 +35,7 @@ const SellerActions = ({ itemData, onSellerActionClick }) => {
   return (
     <>
       <Divider orientation="vertical" sx={{ marginLeft: '16px', height: '120px' }} />
-      <CardActions sx={{ flexDirection: 'column', display: 'flex', justifyContent: 'space-between', padding: '0px 4px', width: 100 }}>
+      <CardActions sx={{ flexDirection: 'column', display: 'flex', justifyContent: 'space-around', padding: '0px 4px', width: 100 }}>
         <Button
           size="small"
           color="warning"
@@ -53,14 +53,14 @@ const SellerActions = ({ itemData, onSellerActionClick }) => {
         >
           EDIT
         </Button>
-        <Button
+        {/* <Button
           size="small"
           onClick={() => {
             onSellerActionClick(listAction, itemData);
           }}
         >
           {listAction.toUpperCase()}
-        </Button>
+        </Button> */}
       </CardActions>
     </>
   );
@@ -135,7 +135,7 @@ BuyerActions.propTypes = {
 const ProductCard = React.forwardRef(({ itemData = {}, onCardClick, onSellerActionClick, onBuyerActionClick }, ref) => {
   const {
     // itemStatus = ItemStatus.EXPIRING,
-    storeName = 'Hello Shop',
+    storeId,
     itemName = 'milk',
     originalPrice = 14.9,
     discountPrice = 10.9,
@@ -170,7 +170,7 @@ const ProductCard = React.forwardRef(({ itemData = {}, onCardClick, onSellerActi
                 <Typography component="div" variant="h3">
                   {itemName}
                 </Typography>
-                <Typography variant="caption">by {storeName}</Typography>
+                <Typography variant="caption">by {storeId}</Typography>
                 <Box>
                   <Chip size="small" label={category} style={{ backgroundColor: ItemCategoryColor[category] }} color="primary" />
                 </Box>
