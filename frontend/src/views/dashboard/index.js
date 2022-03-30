@@ -13,7 +13,7 @@ import { TABLE_COLUMNS } from './constants';
 import { collectRows, forCollectRows, mockReceipt } from './mocks';
 import { useDialogStore } from 'hooks/useDialogStore';
 import { ActionConfirmationDialog } from 'ui-component/ActionConfirmationDialog';
-import { ItemActionTypes } from 'constants/item';
+import { ItemActionTypes, OrderStatus } from 'constants/item';
 import { stringifyPurchaseOrder } from './utils/common';
 import { ListingInfo } from './Components/ListingInfo';
 import { useOrderStore } from 'hooks/useOrderStore';
@@ -42,8 +42,11 @@ const DashboardPage = () => {
   const [selectedTab, setTab] = useState(0);
   const {
     loadRows: loadOrdersForSeller,
+    loadMoreRows: loadMoreOrdersForSeller,
     updateOrderStatus: updateOrderStatusToCollect,
-    orderListRef: sellerOrderListRef
+    orderListRef: sellerOrderListRef,
+    isFirstFetch: isSellerFirstFetch,
+    totalItems: sellerTotalOrders
   } = useOrderStore({
     fetchOrders: getOrdersByStore,
     userid: user.username,
@@ -52,8 +55,11 @@ const DashboardPage = () => {
 
   const {
     loadRows: loadOrdersForBuyer,
+    loadMoreRows: loadMoreOrdersForBuyer,
     updateOrderStatus: updateOrderStatus,
-    orderListRef: buyerOrderListRef
+    orderListRef: buyerOrderListRef,
+    isFirstFetch: isBuyerFirstFetch,
+    totalItems: buyerTotalOrders
   } = useOrderStore({
     fetchOrders: getOrdersByBuyer,
     userid: user.username,
@@ -61,7 +67,6 @@ const DashboardPage = () => {
   });
 
   const handleOnConfirm = (data) => {
-    // TODO update item status
     let updateFunction = data.type === ItemActionTypes.RECEIVED ? updateOrderStatus : updateOrderStatusToCollect;
     updateFunction({ orderId: data.item.orderId, storeId: data.item.storeId }, data.index);
   };
@@ -92,59 +97,55 @@ const DashboardPage = () => {
             }}
             aria-label="dashboard-tabs"
           >
-            <Tab label="To Collect" notifyValue={buyerOrderListRef.current.length} />
-            <Tab label="Pending For Collect" notifyValue={sellerOrderListRef.current.length} />
+            <Tab label="Purchases" notifyValue={buyerTotalOrders} />
+            <Tab label="Sales" notifyValue={sellerTotalOrders} />
           </Tabs>
         </Box>
         <TabPanel value={selectedTab} index={0}>
-          {buyerOrderListRef.current.length > 0 ? (
-            <Table
-              onRowClick={({ rowData, index }) => {
-                openDialog({
-                  extraData: {
-                    index,
-                    item: rowData,
-                    type: ItemActionTypes.RECEIVED
-                  },
-                  title: 'Receive Confirmation',
-                  description: `Are you confirmed that all items in INV${rowData.orderId} \n ===== Items ===== \n${stringifyPurchaseOrder(
-                    rowData.products
-                  )} \n =============== \n are received?`
-                });
-              }}
-              columns={TABLE_COLUMNS.TO_COLLECT}
-              rows={buyerOrderListRef.current}
-            />
-          ) : (
-            <Typography variant="h5" sx={{ m: 4, textAlign: 'center' }}>
-              No item pending for collection
-            </Typography>
-          )}
+          <Table
+            isFirstFetch={isBuyerFirstFetch}
+            loadMoreRows={loadMoreOrdersForBuyer}
+            totalRowCounts={buyerTotalOrders}
+            onRowClick={({ rowData, index }) => {
+              if (rowData.statusCode !== OrderStatus.TO_COLLECT) return;
+              openDialog({
+                extraData: {
+                  index,
+                  item: rowData,
+                  type: ItemActionTypes.RECEIVED
+                },
+                title: 'Receive Confirmation',
+                description: `Are you confirmed that all items in INV${rowData.orderId} \n ===== Items ===== \n${stringifyPurchaseOrder(
+                  rowData.products
+                )} \n =============== \n are received?`
+              });
+            }}
+            columns={TABLE_COLUMNS.TO_COLLECT}
+            rows={buyerOrderListRef.current}
+          />
         </TabPanel>
         <TabPanel value={selectedTab} index={1}>
-          {sellerOrderListRef.current.length > 0 ? (
-            <Table
-              columns={TABLE_COLUMNS.PREPARE}
-              rows={sellerOrderListRef.current}
-              onRowClick={({ rowData, index }) => {
-                openDialog({
-                  extraData: {
-                    index,
-                    item: rowData,
-                    type: ItemActionTypes.DELIVERED
-                  },
-                  title: 'Preparation Confirmation',
-                  description: `Is the order all items in INV${rowData.orderId} \n ===== Items ===== \n${stringifyPurchaseOrder(
-                    rowData.products
-                  )} \n =============== \n ready to be collected?`
-                });
-              }}
-            />
-          ) : (
-            <Typography variant="h5" sx={{ m: 4, textAlign: 'center' }}>
-              No item pending for preparation
-            </Typography>
-          )}
+          <Table
+            isFirstFetch={isSellerFirstFetch}
+            loadMoreRows={loadMoreOrdersForSeller}
+            totalRowCounts={sellerTotalOrders}
+            columns={TABLE_COLUMNS.PREPARE}
+            rows={sellerOrderListRef.current}
+            onRowClick={({ rowData, index }) => {
+              if (rowData.statusCode !== OrderStatus.PREPARE) return;
+              openDialog({
+                extraData: {
+                  index,
+                  item: rowData,
+                  type: ItemActionTypes.DELIVERED
+                },
+                title: 'Preparation Confirmation',
+                description: `Is the order all items in INV${rowData.orderId} \n ===== Items ===== \n${stringifyPurchaseOrder(
+                  rowData.products
+                )} \n =============== \n ready to be collected?`
+              });
+            }}
+          />
         </TabPanel>
       </Grid>
       <ActionConfirmationDialog

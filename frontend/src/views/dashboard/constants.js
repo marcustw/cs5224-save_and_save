@@ -1,7 +1,12 @@
 export const TABLE_COLUMNS = {
   PREPARE: [
     {
-      width: 500,
+      width: 200,
+      label: 'Status',
+      dataKey: 'status'
+    },
+    {
+      width: 300,
       label: 'Receipt No.',
       dataKey: 'orderId',
       prefix: 'INV '
@@ -16,18 +21,23 @@ export const TABLE_COLUMNS = {
   ],
   TO_COLLECT: [
     {
-      width: 300,
+      width: 200,
+      label: 'Status',
+      dataKey: 'status'
+    },
+    {
+      width: 200,
       label: 'Receipt No.',
       dataKey: 'orderId',
       prefix: 'INV '
     },
     {
-      width: 400,
+      width: 350,
       label: 'Store',
       dataKey: 'storeId'
     },
     {
-      width: 200,
+      width: 150,
       label: 'Amount',
       dataKey: 'total_cost',
       prefix: 'SGD ',

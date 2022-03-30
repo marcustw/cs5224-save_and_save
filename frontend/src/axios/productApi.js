@@ -60,3 +60,11 @@ export function addProductsByBatch({ csvFile, userId }) {
     data: csvFile
   });
 }
+
+export function getPopularProducts({ start_date, end_date, userId }) {
+  return get({
+    url: '/data-analytics-query',
+    type: DOMAIN_TYPES.BATCH,
+    params: { customer_id: userId, start_date, end_date }
+  });
+}

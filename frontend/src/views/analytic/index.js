@@ -1,59 +1,69 @@
-import { useEffect, useState } from 'react';
+import { LocalizationProvider, DateRangePicker } from '@mui/lab';
+import { Stack, TextField, Box } from '@mui/material';
+import React from 'react';
+import PopularProductChart from './PopularProductChart';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import { getPopularProducts } from 'axios/productApi';
+import { UserContext } from 'Contexts/UserContext';
+import { format } from 'date-fns';
 
-// material-ui
-import { Grid } from '@mui/material';
+const AnalyticPage = () => {
+  const { user } = React.useContext(UserContext);
+  const [value, setValue] = React.useState([null, null]);
 
-// project imports
-import EarningCard from './EarningCard';
-import PopularCard from './PopularCard';
-import TotalOrderLineChartCard from './TotalOrderLineChartCard';
-import TotalIncomeDarkCard from './TotalIncomeDarkCard';
-import TotalIncomeLightCard from './TotalIncomeLightCard';
-import TotalGrowthBarChart from './TotalGrowthBarChart';
-import { gridSpacing } from 'store/constant';
+  const [data, setData] = React.useState([]);
+  const [isLoading, setLoading] = React.useState(false);
 
-// ==============================|| DEFAULT DASHBOARD ||============================== //
+  const noSelection = !value[0] || !value[1];
+  const dateString = !noSelection ? `From ${format(value[0], 'yyyy/MM/dd')} to ${format(value[1], 'yyyy/MM/dd')}` : '';
 
-const Dashboard = () => {
-  const [isLoading, setLoading] = useState(true);
-  useEffect(() => {
-    setLoading(false);
-  }, []);
+  React.useEffect(() => {
+    if (!value[0] || !value[1]) {
+      return;
+    }
+    setLoading(true);
+    const loadData = async () => {
+      const response = await getPopularProducts({
+        userId: user.username,
+        start_date: value[0].getTime() / 1000,
+        end_date: value[1].getTime() / 1000
+      });
+
+      if (response.status === 200) {
+        console.log(response.data.products);
+        setData(response.data.products);
+      }
+      setLoading(false);
+    };
+    loadData();
+  }, [value]);
 
   return (
-    <Grid container spacing={gridSpacing}>
-      <Grid item xs={12}>
-        <Grid container spacing={gridSpacing}>
-          <Grid item lg={4} md={6} sm={6} xs={12}>
-            <EarningCard isLoading={isLoading} />
-          </Grid>
-          <Grid item lg={4} md={6} sm={6} xs={12}>
-            <TotalOrderLineChartCard isLoading={isLoading} />
-          </Grid>
-          <Grid item lg={4} md={12} sm={12} xs={12}>
-            <Grid container spacing={gridSpacing}>
-              <Grid item sm={6} xs={12} md={6} lg={12}>
-                <TotalIncomeDarkCard isLoading={isLoading} />
-              </Grid>
-              <Grid item sm={6} xs={12} md={6} lg={12}>
-                <TotalIncomeLightCard isLoading={isLoading} />
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid item xs={12}>
-        <Grid container spacing={gridSpacing}>
-          <Grid item xs={12} md={8}>
-            <TotalGrowthBarChart isLoading={isLoading} />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <PopularCard isLoading={isLoading} />
-          </Grid>
-        </Grid>
-      </Grid>
-    </Grid>
+    <Stack>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <DateRangePicker
+          disableFuture={true}
+          disabled={isLoading}
+          startText="Start Date"
+          endText="End Date"
+          value={value}
+          onChange={(newValue) => {
+            setValue(newValue);
+          }}
+          renderInput={(startProps, endProps) => (
+            <>
+              <TextField {...startProps} />
+              <Box sx={{ mx: 2 }}> to </Box>
+              <TextField {...endProps} />
+            </>
+          )}
+        />
+      </LocalizationProvider>
+      <Box sx={{ my: 2 }}>
+        <PopularProductChart isLoading={isLoading} data={data} subTitle={dateString} noSelection={noSelection} />
+      </Box>
+    </Stack>
   );
 };
 
-export default Dashboard;
+export default AnalyticPage;

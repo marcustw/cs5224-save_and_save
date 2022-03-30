@@ -16,6 +16,8 @@ import 'assets/scss/style.scss';
 import { Amplify } from 'aws-amplify';
 import awsExports from './aws-exports';
 import '@aws-amplify/ui-react/styles.css';
+
+import 'react-virtualized/styles.css'; // only needs to be imported once
 Amplify.configure(awsExports);
 
 // ==============================|| REACT DOM RENDER  ||============================== //

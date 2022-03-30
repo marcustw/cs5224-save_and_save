@@ -2,6 +2,13 @@ import { updateOrderState } from 'axios/orderApi';
 import React from 'react';
 import { OrderStatus } from 'constants/item';
 
+function getOrderString(status, isSeller) {
+  if (isSeller) {
+    return status === OrderStatus.PREPARE ? 'To Prepare' : 'Pending Collection';
+  }
+  return status === OrderStatus.PREPARE ? 'Pending Preparation' : 'To Collect';
+}
+
 export const useOrderStore = ({ fetchOrders, userid, isSeller }) => {
   const [orderState, setOrderState] = React.useState({
     totalCount: 0,
@@ -29,28 +36,27 @@ export const useOrderStore = ({ fetchOrders, userid, isSeller }) => {
       });
       if (response.status === 200) {
         const { payload } = response.data;
-        let orderList = Object.keys(response.data.payload).map((orderId) => {
+        const orderMap = {
+          ...orderMapRef.current,
+          ...payload
+        };
+        let orderList = Object.keys(orderMap).map((orderId) => {
+          const status = orderMap[orderId].products[0].status;
           return {
             orderId,
-            storeId: payload[orderId].products[0].store_id,
-            products: payload[orderId].products,
-            total_cost: parseFloat(payload[orderId].total_cost).toFixed(2)
+            storeId: orderMap[orderId].products[0].store_id,
+            status: getOrderString(status, isSeller),
+            statusCode: status,
+            products: orderMap[orderId].products,
+            total_cost: parseFloat(orderMap[orderId].total_cost).toFixed(2)
           };
-        });
-        const validStatus = isSeller ? OrderStatus.PREPARE : OrderStatus.TO_COLLECT;
-        orderList = orderList.filter((order) => {
-          console.log(order.products[0].status, validStatus);
-          return order.products[0].status === validStatus;
         });
 
         loadingRef.current = false;
         setOrderState({
           totalCount: response.data.count,
           orderList: orderList,
-          orderMap: {
-            ...orderMapRef.current,
-            ...payload
-          },
+          orderMap,
           isInit: false
         });
       }
@@ -63,34 +69,36 @@ export const useOrderStore = ({ fetchOrders, userid, isSeller }) => {
         loadingRef.current = true;
         const response = await fetchOrdersRef.current({
           offset: startIndex,
-          userid
+          store_id: isSeller ? userid : undefined,
+          customer_id: isSeller ? undefined : userid
         });
 
         if (response.status === 200) {
           const { payload } = response.data;
-          let orderList = Object.keys(response.data.payload).map((orderId) => {
+          const orderMap = {
+            ...orderMapRef.current,
+            ...payload
+          };
+          let orderList = Object.keys(orderMap).map((orderId) => {
+            const status = orderMap[orderId].products[0].status;
             return {
               orderId,
-              storeId: payload[orderId].products[0].store_id,
-              products: payload[orderId].products,
-              total_cost: parseFloat(payload[orderId].total_cost).toFixed(2)
+              storeId: orderMap[orderId].products[0].store_id,
+              status: getOrderString(status, isSeller),
+              statusCode: status,
+              products: orderMap[orderId].products,
+              total_cost: parseFloat(orderMap[orderId].total_cost).toFixed(2)
             };
           });
 
-          const validStatus = isSeller ? OrderStatus.PREPARE : OrderStatus.TO_COLLECT;
-          orderList = orderList.filter((order) => order.products[0].status === validStatus);
-
           loadingRef.current = false;
-          hasMore.current = response.data.products.length > 0;
-          const listCopy = [...orderListRef.current, ...orderList];
+          // const listCopy = [...orderListRef.current, ...orderList];
+          hasMore.current = response.data.count > 0;
           setOrderState((prevState) => ({
             ...prevState,
             isInit: false,
-            orderList: listCopy,
-            orderMap: {
-              ...orderMapRef.current,
-              ...payload
-            }
+            orderList,
+            orderMap
           }));
         }
 

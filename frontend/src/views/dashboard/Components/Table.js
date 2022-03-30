@@ -4,8 +4,8 @@ import clsx from 'clsx';
 import { withStyles } from '@mui/styles';
 import { createTheme } from '@mui/material/styles';
 import TableCell from '@mui/material/TableCell';
-import Paper from '@mui/material/Paper';
-import { AutoSizer, Column, Table } from 'react-virtualized';
+import { Paper, Typography, Box, CircularProgress } from '@mui/material';
+import { AutoSizer, Column, Table, InfiniteLoader } from 'react-virtualized';
 
 const styles = (theme) => ({
   flexContainer: {
@@ -89,43 +89,81 @@ class MuiVirtualizedTable extends React.PureComponent {
     );
   };
 
-  render() {
-    const { classes, columns, rowHeight, headerHeight, fixedWidth, ...tableProps } = this.props;
+  emptyOrLoadingWrapper = (children) => {
     return (
-      <AutoSizer>
-        {({ height, width }) => (
-          <Table
-            height={height}
-            width={fixedWidth || width}
-            rowHeight={rowHeight}
-            gridStyle={{
-              direction: 'inherit'
-            }}
-            headerHeight={headerHeight}
-            className={classes.table}
-            {...tableProps}
-            rowClassName={this.getRowClassName}
-          >
-            {columns.map(({ dataKey, ...other }, index) => {
-              return (
-                <Column
-                  key={dataKey}
-                  headerRenderer={(headerProps) =>
-                    this.headerRenderer({
-                      ...headerProps,
-                      columnIndex: index
-                    })
-                  }
-                  className={classes.flexContainer}
-                  cellRenderer={this.cellRenderer}
-                  dataKey={dataKey}
-                  {...other}
-                />
-              );
-            })}
-          </Table>
-        )}
-      </AutoSizer>
+      <Box display="flex" justifyContent="center" m={4} height="100%" alignItems="center">
+        {children}
+      </Box>
+    );
+  };
+
+  render() {
+    const {
+      classes,
+      columns,
+      rowHeight,
+      headerHeight,
+      fixedWidth,
+      isRowLoaded,
+      loadMoreRows,
+      totalRowCounts,
+      isFirstFetch,
+      rowCount,
+      ...tableProps
+    } = this.props;
+
+    if (isFirstFetch) {
+      return this.emptyOrLoadingWrapper(<CircularProgress />);
+    }
+
+    if (rowCount < 1) {
+      return this.emptyOrLoadingWrapper(<Typography variant="h3">No order found</Typography>);
+    }
+
+    return (
+      <div style={{ height: 'calc(100% - 50px)' }}>
+        <InfiniteLoader isRowLoaded={isRowLoaded} loadMoreRows={loadMoreRows} rowCount={totalRowCounts}>
+          {({ onRowsRendered, registerChild }) => (
+            <AutoSizer>
+              {({ height, width }) => (
+                <Table
+                  rowCount={rowCount}
+                  height={height}
+                  width={fixedWidth || width}
+                  rowHeight={rowHeight}
+                  gridStyle={{
+                    direction: 'inherit'
+                  }}
+                  headerHeight={headerHeight}
+                  className={classes.table}
+                  onRowsRendered={onRowsRendered}
+                  ref={registerChild}
+                  {...tableProps}
+                  rowClassName={this.getRowClassName}
+                >
+                  {columns.map(({ dataKey, ...other }, index) => {
+                    return (
+                      <Column
+                        key={dataKey}
+                        headerRenderer={(headerProps) =>
+                          this.headerRenderer({
+                            ...headerProps,
+                            columnIndex: index
+                          })
+                        }
+                        className={classes.flexContainer}
+                        cellRenderer={this.cellRenderer}
+                        dataKey={dataKey}
+                        {...other}
+                      />
+                    );
+                  })}
+                </Table>
+              )}
+            </AutoSizer>
+          )}
+        </InfiniteLoader>
+      </div>
     );
   }
 }
@@ -143,16 +181,33 @@ MuiVirtualizedTable.propTypes = {
   headerHeight: PropTypes.number,
   onRowClick: PropTypes.func,
   rowHeight: PropTypes.number,
-  fixedWidth: PropTypes.number
+  fixedWidth: PropTypes.number,
+  totalRowCounts: PropTypes.number,
+  loadMoreRows: PropTypes.func
 };
 
 const defaultTheme = createTheme();
 const VirtualizedTable = withStyles(styles, { defaultTheme })(MuiVirtualizedTable);
 
-export default function ReactVirtualizedTable({ columns, rows, onRowClick }) {
+export default function ReactVirtualizedTable({ isFirstFetch, columns, rows, onRowClick, totalRowCounts, loadMoreRows }) {
+  const isRowLoaded = React.useCallback(
+    ({ index }) => {
+      return !!rows[index];
+    },
+    [rows]
+  );
   return (
     <Paper style={{ height: '60vh', margin: '8px', maxWidth: 900 }}>
-      <VirtualizedTable rowCount={rows.length} rowGetter={({ index }) => rows[index]} columns={columns} onRowClick={onRowClick} />
+      <VirtualizedTable
+        isFirstFetch={isFirstFetch}
+        totalRowCounts={totalRowCounts}
+        loadMoreRows={loadMoreRows}
+        rowCount={rows.length}
+        rowGetter={({ index }) => rows[index]}
+        columns={columns}
+        onRowClick={onRowClick}
+        isRowLoaded={isRowLoaded}
+      />
     </Paper>
   );
 }

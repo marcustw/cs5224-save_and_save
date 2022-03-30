@@ -7,7 +7,7 @@ const TabNotify = ({ value, title }) => {
         {title}
       </Typography>
       <Typography ml={2} variant="caption" display="inline">
-        ({value} items)
+        ({value})
       </Typography>
     </div>
   );

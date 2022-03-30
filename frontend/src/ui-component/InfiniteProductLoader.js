@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Typography, Box, CircularProgress } from '@mui/material';
 import { InfiniteLoader, List, AutoSizer } from 'react-virtualized';
-import 'react-virtualized/styles.css'; // only needs to be imported once
 import ProductCard from './productCard';
 
 export const InfiniteProductLoader = ({
@@ -84,7 +83,7 @@ InfiniteProductLoader.propTypes = {
    */
   listMap: PropTypes.any.isRequired,
   // ({ startIndex, stopIndex }) => Promise
-  loadMoreRows: PropTypes.string,
+  loadMoreRows: PropTypes.func,
   totalRowCounts: PropTypes.number,
   onSellerActionClick: PropTypes.func,
   onBuyerActionClick: PropTypes.func,

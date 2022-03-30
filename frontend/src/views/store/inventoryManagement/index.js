@@ -26,7 +26,8 @@ const InventoryManagementPage = () => {
         return searchProducts({
           offset,
           limit,
-          keyword: keyword || undefined
+          keyword: keyword || undefined,
+          store_id: user.username
         });
       },
       updateProductHandler: ({ item }) => {
