@@ -54,12 +54,13 @@ const PopularProductChart = ({ isLoading, data, subTitle, noSelection }) => {
     const displayData = data.slice(0, 10);
     const seriesData = displayData.map((item) => item[1]);
     const seriesLabel = displayData.map((item) => item[0]);
+    const minHeight = displayData.length <= 1 ? 100 : 0;
 
     const options = {
       ...barOptions,
       chart: {
         type: 'bar',
-        height: displayData.length * 75
+        height: displayData.length * 75 + minHeight
       },
       series: [
         {

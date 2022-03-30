@@ -26,11 +26,10 @@ const AnalyticPage = () => {
       const response = await getPopularProducts({
         userId: user.username,
         start_date: value[0].getTime() / 1000,
-        end_date: value[1].getTime() / 1000
+        end_date: value[1].getTime() / 1000 + 86400
       });
 
       if (response.status === 200) {
-        console.log(response.data.products);
         setData(response.data.products);
       }
       setLoading(false);
