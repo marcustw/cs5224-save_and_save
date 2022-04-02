@@ -17,7 +17,6 @@ export const AddItemActions = () => {
   };
 
   const handleOnOneItemSubmit = (itemData) => {
-    console.log(itemData);
     handleOnAddDialogClose();
   };
 

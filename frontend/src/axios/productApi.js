@@ -61,10 +61,10 @@ export function addProductsByBatch({ csvFile, userId }) {
   });
 }
 
-export function getPopularProducts({ start_date, end_date, userId }) {
+export function getPopularProducts({ start_date, end_date, userId, type }) {
   return get({
     url: '/data-analytics-query',
     type: DOMAIN_TYPES.BATCH,
-    params: { customer_id: userId, start_date, end_date }
+    params: { customer_id: userId, start_date, end_date, type }
   });
 }

@@ -7,10 +7,11 @@ import { CircularProgress, Grid, Paper, Typography } from '@mui/material';
 import ApexCharts from 'apexcharts';
 import Chart from 'react-apexcharts';
 
-// chart data
-import chartData from './chart-data/total-growth-bar-chart';
-
 const barOptions = {
+  chart: {
+    id: 'popular-product',
+    type: 'bar'
+  },
   plotOptions: {
     bar: {
       barHeight: '100%',
@@ -31,6 +32,9 @@ const barOptions = {
       show: false
     }
   },
+  xaxis: {
+    categories: ['dummy']
+  },
   tooltip: {
     theme: 'dark',
     x: {
@@ -46,6 +50,15 @@ const barOptions = {
   }
 };
 
+const chartData = {
+  height: 300,
+  type: 'bar',
+  options: {
+    ...barOptions
+  },
+  series: []
+};
+
 // ==============================|| DASHBOARD DEFAULT - TOTAL GROWTH BAR CHART ||============================== //
 
 const PopularProductChart = ({ isLoading, data, subTitle, noSelection }) => {
@@ -59,8 +72,9 @@ const PopularProductChart = ({ isLoading, data, subTitle, noSelection }) => {
     const options = {
       ...barOptions,
       chart: {
+        id: 'bar-chart',
         type: 'bar',
-        height: displayData.length * 75 + minHeight
+        height: displayData.length * 60 + minHeight
       },
       series: [
         {
@@ -97,7 +111,7 @@ const PopularProductChart = ({ isLoading, data, subTitle, noSelection }) => {
 
     // do not load chart when loading
     if (!isLoading) {
-      ApexCharts.exec(`bar-chart`, 'updateOptions', options);
+      ApexCharts.exec(`popular-product`, 'updateOptions', options);
     }
   }, [isLoading, data, subTitle]);
 
@@ -127,7 +141,10 @@ const PopularProductChart = ({ isLoading, data, subTitle, noSelection }) => {
 };
 
 PopularProductChart.propTypes = {
-  isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
+  data: PropTypes.array,
+  subTitle: PropTypes.string,
+  noSelection: PropTypes.bool
 };
 
 export default PopularProductChart;

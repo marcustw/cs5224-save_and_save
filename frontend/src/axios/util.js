@@ -34,7 +34,6 @@ function responseHandler(response) {
 }
 
 function formatUrl(type, url) {
-  console.log(DOMAINS[type] + url);
   return DOMAINS[type] + url;
 }
 

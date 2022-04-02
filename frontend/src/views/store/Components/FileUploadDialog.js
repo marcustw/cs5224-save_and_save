@@ -60,7 +60,6 @@ export const FileUploadDialog = ({ onClose, open }) => {
   const handleFileUpload = async () => {
     if (errorMsg) return;
     const res = await addProductsByBatch({ csvFile: file, userId: user.username });
-    console.log(res);
     handleOnClose();
     setFile(undefined);
   };
