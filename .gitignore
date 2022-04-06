@@ -2,6 +2,9 @@
 /frontend/build
 /frontend/coverage
 
+/backend/.env
+/backend/src/**/secrets.py
+
 # testing
 /coverage
 
