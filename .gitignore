@@ -4,6 +4,7 @@
 
 /backend/.env
 /backend/src/**/secrets.py
+/backend/__pycache__
 
 # testing
 /coverage
