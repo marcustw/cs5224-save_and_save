@@ -7,7 +7,7 @@ import time
 import datetime
 from botocore.client import Config
 import uuid
-from secrets import USERNAME, PASSWORD, DATABASE
+from secrets import USERNAME, PASSWORD, DATABASE, DB_HOST, DB_PORT
 
 BUCKET_NAME = "save-and-save-csvs"
 
@@ -127,8 +127,8 @@ def add_csv_to_s3(df, user_id):
 def set_up_db():
     conn = psycopg2.connect(user=USERNAME,
                               password=PASSWORD,
-                              host="save.cdc2z2pnuvzu.us-east-1.rds.amazonaws.com",
-                              port="5432",
+                              host=DB_HOST,
+                              port=DB_PORT,
                               database=DATABASE)
     cursor = conn.cursor()
     
@@ -138,8 +138,8 @@ def count_rows_db():
     conn = None
     conn = psycopg2.connect(user=USERNAME,
                               password=PASSWORD,
-                              host="save.cdc2z2pnuvzu.us-east-1.rds.amazonaws.com",
-                              port="5432",
+                              host=DB_HOST,
+                              port=DB_PORT,
                               database=DATABASE)
     cur = conn.cursor()
     # create table one by one
