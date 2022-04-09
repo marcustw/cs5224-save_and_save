@@ -87,6 +87,7 @@ FormikTextInput.propTypes = {
 export const FormikSelectInput = ({
   errors,
   handleBlur,
+  setFieldValue,
   touched,
   values,
   label,
@@ -114,6 +115,9 @@ export const FormikSelectInput = ({
         label={label}
         id={field}
         value={values[field]}
+        onChange={(event) => {
+          setFieldValue(field, event.target.value);
+        }}
       >
         {menuItems.map((option) => (
           <MenuItem key={option.value} value={option.value}>

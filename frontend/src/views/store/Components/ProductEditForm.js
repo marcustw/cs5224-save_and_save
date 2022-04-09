@@ -129,6 +129,7 @@ const ProductForm = React.forwardRef(({ itemData = {}, onSubmit, ...others }, re
                 field="discountReason"
                 label="Discount Reason"
                 menuItems={DiscountReasons}
+                setFieldValue={setFieldValue}
               />
             </Box>
             <Box mr={2} display="inline-block">
