@@ -49,11 +49,11 @@ df['discounted_reason'] = df.apply(lambda row : generate_discount_reason(row), a
 df['discounted'] = (0.8) * df['discounted']
 
 # new price
-df['discounted_price'] = (df['discounted'] * df['actual_price']).round(2)
+df['discounted_price'] = ((1 - df['discounted']) * df['actual_price']).round(2)
 
 # available till
 curr_date = date.today()
-dates = [curr_date + timedelta(days=i) for i in range(1,15)]
+dates = [curr_date + timedelta(days=i) for i in range(1,60)]
 random_dates = choices(dates, k=len(df))
 df['available_date'] = random_dates
 
