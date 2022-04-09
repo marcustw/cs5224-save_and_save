@@ -18,6 +18,7 @@ const AccountPage = () => {
     if (customs.username) {
       promises.push(
         updateUserInfo({
+          username: user.username,
           id: user.username,
           address,
           contact_no: Number(contact),
@@ -30,6 +31,7 @@ const AccountPage = () => {
       promises.push(
         createUser({
           ...customs,
+          username: user.username,
           id: user.username,
           password: 'NIL',
           address,
