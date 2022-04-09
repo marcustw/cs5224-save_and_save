@@ -1,5 +1,6 @@
 import json
 from operations import *
+from secrets import USERNAME, PASSWORD, DATABASE
 
 operations_dict = {
     'POST': handle_post_purchase
