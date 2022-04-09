@@ -114,22 +114,22 @@ def create_purchase_product(cursor, purchase_product_info):
     return success
 
 def set_up_db():
-    conn = psycopg2.connect(user="postgres",
-                              password="savensave",
+    conn = psycopg2.connect(user=USERNAME,
+                              password=PASSWORD,
                               host="save.cdc2z2pnuvzu.us-east-1.rds.amazonaws.com",
                               port="5432",
-                              database="save")
+                              database=DATABASE)
     cursor = conn.cursor()
     
     return conn, cursor
     
 def count_rows_db():
     conn = None
-    conn = psycopg2.connect(user="postgres",
-                              password="savensave",
+    conn = psycopg2.connect(user=USERNAME,
+                              password=PASSWORD,
                               host="save.cdc2z2pnuvzu.us-east-1.rds.amazonaws.com",
                               port="5432",
-                              database="save")
+                              database=DATABASE)
     cur = conn.cursor()
     # create table one by one
     cur.execute("SELECT count(id) from product_listing;")
