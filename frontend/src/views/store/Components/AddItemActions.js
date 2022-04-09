@@ -34,9 +34,6 @@ export const AddItemActions = () => {
         <Button variant="outlined" onClick={handleAddByBatch}>
           Add Items By Batch
         </Button>
-        <Button variant="contained" onClick={handleOnAddItem}>
-          Add Item
-        </Button>
       </Stack>
       {/** edit product form dialog  */}
       <FormEditDialog open={addDialogOpen} onClose={handleOnAddDialogClose} title="Add Item">
