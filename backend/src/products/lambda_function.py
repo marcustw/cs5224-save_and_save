@@ -42,4 +42,3 @@ def lambda_handler(event, context):
             return respond(ValueError('Unsupported method "{}"'.format(operation)))
     
     return respond(ValueError("Unsupported api call"))
-

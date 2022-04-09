@@ -60,6 +60,3 @@ def validate_event(event, response):
 
     
     return True
-    
-    
-    

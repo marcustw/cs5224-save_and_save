@@ -12,4 +12,3 @@ def test_db():
         return cursor
     except:
         return None
-
