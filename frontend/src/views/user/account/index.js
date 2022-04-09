@@ -15,6 +15,7 @@ const AccountPage = () => {
   const handleOnSubmit = async (values) => {
     const { address, contact, ...customs } = values;
     const promises = [];
+    let createAccount = false;
     if (customs.username) {
       promises.push(
         updateUserInfo({
@@ -28,6 +29,7 @@ const AccountPage = () => {
         })
       );
     } else {
+      createAccount = true;
       promises.push(
         createUser({
           ...customs,
@@ -41,7 +43,14 @@ const AccountPage = () => {
       );
     }
     promises.push(Auth.updateUserAttributes(user, { address, phone_number: `+65${contact}` }));
-    await Promise.all(promises);
+    const [result] = await Promise.all(promises);
+    if (createAccount && result.status === 200) {
+      setAccount((prev) => ({
+        ...prev,
+        ...customs,
+        username: user.username
+      }));
+    }
   };
 
   React.useEffect(() => {
