@@ -87,7 +87,7 @@ const DashboardPage = () => {
 
   return (
     <Grid container spacing={gridSpacing}>
-      <ListingInfo isLoadng={isLoading} onSaleCount={213} expiringCount={10} unlistedCount={20} />
+      {/* <ListingInfo isLoadng={isLoading} onSaleCount={213} expiringCount={10} unlistedCount={20} /> */}
       <Grid xs={12} item>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs
