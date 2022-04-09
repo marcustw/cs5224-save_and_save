@@ -80,7 +80,7 @@ def edit_item(cursor, **product_info):
         sql_query = "UPDATE product_listing SET {} WHERE id={}".format(set_values, product_id)
         try:
             cursor.execute(sql_query)
-            cursor.execute("SELECT 1 FROM product_listing WHERE id={};".format(product_id))
+            cursor.execute("SELECT * FROM product_listing WHERE id={} LIMIT 1;".format(product_id))
             product = cursor.fetchone()
             payload = {}
             for i in range(len(column_names)):
