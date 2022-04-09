@@ -9,5 +9,3 @@ def test_db():
                               database=DATABASE)
     cursor = conn.cursor()
     return cursor, conn
-    
-    

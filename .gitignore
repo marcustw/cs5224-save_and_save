@@ -1,3 +1,5 @@
+/to_git_ignore/**
+
 /frontend/node_modules
 /frontend/build
 /frontend/coverage

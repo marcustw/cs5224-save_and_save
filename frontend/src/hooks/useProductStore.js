@@ -106,7 +106,8 @@ export const useProductStore = ({ fetchProduct, store_id }) => {
         }
         setProductState((prevState) => ({
           ...prevState,
-          productList: newList
+          productList: newList,
+          totalCount: newList.length
         }));
       }
     };
